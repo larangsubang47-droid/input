@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Produksi Air Bersih - BUMN</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-logo">
+                <h1>BUMN UNTUK INDONESIA</h1>
+                <p>JATILUHUR</p>
+            </div>
+            <div class="header-title">
+                <h2>LAPORAN PENCATATAN PRODUKSI AIR BERSIH</h2>
+                <h3>CLEAN WATER PRODUCTION RECORDING REPORT</h3>
+            </div>
+            <div class="header-info">
+                <div>Halaman: 1 of 2</div>
+                <div>Revisi ke: 0</div>
+                <div>Hari: <span id="currentDay"></span></div>
+                <div>Tanggal: <span id="currentDate"></span></div>
+            </div>
+        </header>
+
+        <div class="operator-info">
+            <label>Operator Shift 1: <input type="text" id="operatorShift1" placeholder="Nama Operator"></label>
+            <label>Operator Shift 2: <input type="text" id="operatorShift2" placeholder="Nama Operator"></label>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'cleanWater')">Clean Water Production</button>
+            <button class="tab-button" onclick="openTab(event, 'pressureIntake')">Pressure & Hz Intake</button>
+            <button class="tab-button" onclick="openTab(event, 'wdcInfo')">Info WDC</button>
+        </div>
+
+        <!-- Tab 1: Clean Water Production -->
+        <div id="cleanWater" class="tab-content active">
+            <h3>CLEAN WATER PRODUCTION RECORDING REPORT</h3>
+            
+            <div class="section">
+                <h4>Level Air</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Kegiatan</th>
+                            <th>Satuan</th>
+                            <th>07:00</th>
+                            <th>08:00</th>
+                            <th>09:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Air Baku Intake</td>
+                            <td>Mdpl</td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="airBakuIntake" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Reservoir</td>
+                            <td>cm</td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="levelAir" data-param="reservoir" data-time="16:00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h4>Flow/Debit Aliran</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Kegiatan</th>
+                            <th>Satuan</th>
+                            <th>07:00</th>
+                            <th>08:00</th>
+                            <th>09:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inlet WTP</td>
+                            <td>Lps</td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="inletWTP" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Outlet WTP</td>
+                            <td>Lps</td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="flowDebit" data-param="outletWTP" data-time="16:00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h4>Pressure Distribusi</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Kegiatan</th>
+                            <th>Satuan</th>
+                            <th>07:00</th>
+                            <th>08:00</th>
+                            <th>09:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Pompa 1</td>
+                            <td>Bar</td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa1" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Pompa 2</td>
+                            <td>Bar</td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa2" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Pompa 3</td>
+                            <td>Bar</td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureDistribusi" data-param="pompa3" data-time="16:00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h4>Hz Distribusi</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Kegiatan</th>
+                            <th>Satuan</th>
+                            <th>07:00</th>
+                            <th>08:00</th>
+                            <th>09:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Pompa 1</td>
+                            <td>Hz</td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa1" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Pompa 2</td>
+                            <td>Hz</td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa2" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Pompa 3</td>
+                            <td>Hz</td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzDistribusi" data-param="pompa3" data-time="16:00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Shift Malam -->
+            <h3 style="margin-top: 30px;">FREKUENSI PENGAMBILAN SHIFT MALAM (17:00 - 06:00)</h3>
+            <div class="time-selector">
+                <label>Pilih Waktu Malam:</label>
+                <select id="nightTimeSelector">
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                </select>
+            </div>
+
+            <div id="nightDataContainer"></div>
+        </div>
+
+        <!-- Tab 2: Pressure & Hz Intake -->
+        <div id="pressureIntake" class="tab-content">
+            <h3>LAPORAN PENCATATAN PRODUKSI AIR BERSIH - PRESSURE & HZ INTAKE</h3>
+            
+            <div class="section">
+                <h4>Pressure Intake (07:00 - 16:00)</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Kegiatan</th>
+                            <th>Satuan</th>
+                            <th>07:00</th>
+                            <th>08:00</th>
+                            <th>09:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Pompa 1</td>
+                            <td>Bar</td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa1" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Pompa 2</td>
+                            <td>Bar</td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa2" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Pompa 3</td>
+                            <td>Bar</td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="pressureIntake" data-param="pompa3" data-time="16:00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h4>Hz Intake (07:00 - 16:00)</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Kegiatan</th>
+                            <th>Satuan</th>
+                            <th>07:00</th>
+                            <th>08:00</th>
+                            <th>09:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Pompa 1</td>
+                            <td>Hz</td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa1" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Pompa 2</td>
+                            <td>Hz</td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa2" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Pompa 3</td>
+                            <td>Hz</td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="hzIntake" data-param="pompa3" data-time="16:00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h4>Total Water Meter</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Kegiatan</th>
+                            <th>Satuan</th>
+                            <th>Nilai (07:00)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total WM Air Baku</td>
+                            <td>M3</td>
+                            <td><input type="number" step="0.01" data-category="totalWM" data-param="airBaku" data-time="07:00"></td>
+                        </tr>
+                        <tr>
+                            <td>Total WM Air Bersih</td>
+                            <td>M3</td>
+                            <td><input type="number" step="0.01" data-category="totalWM" data-param="airBersih" data-time="07:00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Night Shift untuk Pressure & Hz Intake -->
+            <h3 style="margin-top: 30px;">SHIFT MALAM (17:00 - 06:00)</h3>
+            <div class="time-selector">
+                <label>Pilih Waktu Malam:</label>
+                <select id="nightTimeSelector2">
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                </select>
+            </div>
+
+            <div id="nightDataContainer2"></div>
+        </div>
+
+        <!-- Tab 3: Info WDC -->
+        <div id="wdcInfo" class="tab-content">
+            <h3>INFO WDC (Water Distribution Center)</h3>
+            
+            <div class="section">
+                <h4>Info WDC (07:00 - 16:00)</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Kegiatan</th>
+                            <th>Satuan</th>
+                            <th>07:00</th>
+                            <th>08:00</th>
+                            <th>09:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Level WDC (%)</td>
+                            <td>Persen</td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="levelWDC" data-time="16:00"></td>
+                        </tr>
+                        <tr>
+                            <td>LPS OUT WDC</td>
+                            <td>LPS</td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="07:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="08:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="09:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="10:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="11:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="12:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="13:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="14:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="15:00"></td>
+                            <td><input type="number" step="0.01" data-category="wdc" data-param="lpsOutWDC" data-time="16:00"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Night Shift untuk WDC -->
+            <h3 style="margin-top: 30px;">SHIFT MALAM (17:00 - 06:00)</h3>
+            <div class="time-selector">
+                <label>Pilih Waktu Malam:</label>
+                <select id="nightTimeSelector3">
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                </select>
+            </div>
+
+            <div id="nightDataContainer3"></div>
+        </div>
+
+        <div class="submit-section">
+            <button onclick="saveData()" class="btn-save">Simpan Data</button>
+            <button onclick="sendToGoogleSheets()" class="btn-submit">Kirim ke Google Sheets</button>
+        </div>
+
+        <div id="statusMessage"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
