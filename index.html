@@ -49,7 +49,10 @@
     <!-- FORM INPUT -->
     <div id="formScreen" class="container">
       <div class="card">
-        <h2 class="section-title">📋 Form Laporan Produksi</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 class="section-title" style="margin: 0;">📋 Form Laporan Produksi</h2>
+          <span id="draftIndicator" style="display: none; background: #4caf50; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;">💾 Draft tersimpan</span>
+        </div>
         
         <!-- HEADER INFO - OPERATOR DI ATAS -->
         <div class="form-section">
@@ -205,14 +208,26 @@
           </div>
         </div>
 
-        <!-- BUTTONS -->
-        <div class="form-actions">
-          <button class="btn btn-success" onclick="saveData()" id="saveBtn">
-            💾 Simpan Laporan
+        <!-- BUTTONS - UPDATED WITH DRAFT & FINAL -->
+        <div class="form-actions-improved">
+          <button class="btn btn-draft" onclick="saveDraft()" id="saveDraftBtn">
+            💾 Simpan Draft
           </button>
-          <button class="btn btn-secondary" onclick="clearForm()">
-            🔄 Reset Form
+          <button class="btn btn-load" onclick="loadDraft()" id="loadDraftBtn">
+            📂 Muat Draft
           </button>
+          <button class="btn btn-success" onclick="saveDataFinal()" id="saveFinalBtn">
+            📤 Submit Final
+          </button>
+          <button class="btn btn-danger-outline" onclick="deleteDraft()" id="deleteDraftBtn">
+            🗑️ Hapus Draft
+          </button>
+        </div>
+        
+        <div style="margin-top: 12px; padding: 12px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196f3;">
+          <p style="margin: 0; font-size: 13px; color: #1976d2;">
+            <strong>ℹ️ Info:</strong> Draft disimpan otomatis setiap 30 detik. Gunakan "Submit Final" untuk mengirim ke server.
+          </p>
         </div>
       </div>
     </div>
@@ -241,7 +256,7 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app-improved.js"></script>
 
 </body>
 </html>
