@@ -1,7 +1,7 @@
 // ==========================================
 // KONFIGURASI API
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbyPksJfRgPsygxpzoxOXDa8YUWjlwzxpGAie6enJVjj_3v2pyQ11Eal6ZY6-asdrpL2kA/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxrOaK-tT5TeAAFtK4FdLpHsdGsqddGMK894oYEAdDmBhUSx70ZBYZoLiHcE1FHCaN6LQ/exec';
 
 // ==========================================
 // DATA STRUKTUR
@@ -422,6 +422,7 @@ if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 
 }
+
 
 
 
