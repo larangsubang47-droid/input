@@ -1,7 +1,7 @@
 // ==========================================
 // KONFIGURASI API
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbxmWxR8PgLMdDaGS5CKzolDZ2ncQ_FH01I3NBnkFt7sKFs5RfVB2vx8hWL51J0RE-MmDA/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyd3Bfi7R6pFi6_8v-6WB6fAIb4Aivjlct1WSsyEPkuf3-xfqrXdRFMzDyJPAscQKsbmQ/exec';
 
 // ==========================================
 // KONFIGURASI API
@@ -635,4 +635,5 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
+
 
