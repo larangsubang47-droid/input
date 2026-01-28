@@ -3,9 +3,6 @@
 // ==========================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbz7k8vpnNPUtugTp2GVYnQKnnCNPy_zg_Sf6ZXbD-6XhA45HNWODiA7i9tbwdB-YGgv0Q/exec';
 
-// ==========================================
-// DATA STRUKTUR
-// ==========================================
 const dataStructure = {
   levelAir: [
     { name: 'Air Baku Intake', satuan: 'Mdpl' },
@@ -242,12 +239,15 @@ async function saveData() {
   saveBtn.textContent = '⏳ Menyimpan...';
 
   try {
-    // Collect all data
+    // Collect all data - HAPUS halaman & revisi
     const reportData = {
       hari: hari,
       tanggal: tanggal,
-      halaman: document.getElementById('halaman').value,
-      revisi: document.getElementById('revisi').value,
+      // halaman & revisi DIHAPUS
+      operator: {
+        shift1: document.getElementById('operatorShift1').value,
+        shift2: document.getElementById('operatorShift2').value
+      },
       levelAir: collectTableData('levelAirTable', dataStructure.levelAir),
       flowDebit: collectTableData('flowDebitTable', dataStructure.flowDebit),
       pressureDistribusi: collectTableData('pressureDistribusiTable', dataStructure.pressureDistribusi),
@@ -268,10 +268,6 @@ async function saveData() {
       totalWM: {
         airBaku: document.getElementById('totalWMAirBaku').value,
         airBersih: document.getElementById('totalWMAirBersih').value
-      },
-      operator: {
-        shift1: document.getElementById('operatorShift1').value,
-        shift2: document.getElementById('operatorShift2').value
       },
       catatan: document.getElementById('catatan').value,
       selectedTimes: selectedTimes
@@ -309,6 +305,8 @@ function clearForm() {
   
   document.getElementById('hari').value = days[today.getDay()];
   document.getElementById('tanggal').valueAsDate = today;
+  document.getElementById('operatorShift1').value = '';
+  document.getElementById('operatorShift2').value = '';
   document.getElementById('kwhWBP1').value = '';
   document.getElementById('kwhLWBP1').value = '';
   document.getElementById('kwhLWBP2').value = '';
@@ -317,8 +315,6 @@ function clearForm() {
   document.getElementById('backwashPlan2').value = '';
   document.getElementById('totalWMAirBaku').value = '';
   document.getElementById('totalWMAirBersih').value = '';
-  document.getElementById('operatorShift1').value = '';
-  document.getElementById('operatorShift2').value = '';
   document.getElementById('catatan').value = '';
   
   // Clear all table inputs
@@ -420,14 +416,4 @@ function showNotification(message, type = 'success') {
 // Request notification permission
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
-
 }
-
-
-
-
-
-
-
-
-
