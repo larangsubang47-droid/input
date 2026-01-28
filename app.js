@@ -3,6 +3,9 @@
 // ==========================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbz7k8vpnNPUtugTp2GVYnQKnnCNPy_zg_Sf6ZXbD-6XhA45HNWODiA7i9tbwdB-YGgv0Q/exec';
 
+// ==========================================
+// DATA STRUKTUR
+// ==========================================
 const dataStructure = {
   levelAir: [
     { name: 'Air Baku Intake', satuan: 'Mdpl' },
@@ -35,6 +38,10 @@ const dataStructure = {
   wdc: [
     { name: 'Level WDC (%)', satuan: 'Persen' },
     { name: 'LPS OUT WDC', satuan: 'LPS' }
+  ],
+  backwashFilter: [
+    { name: 'Plan 1', satuan: 'Unit' },
+    { name: 'Plan 2', satuan: 'Unit' }
   ]
 };
 
@@ -169,6 +176,7 @@ function initializeTables() {
   createDataTable('pressureIntakeTable', dataStructure.pressureIntake);
   createDataTable('hzIntakeTable', dataStructure.hzIntake);
   createDataTable('wdcTable', dataStructure.wdc);
+  createDataTable('backwashFilterTable', dataStructure.backwashFilter);
 }
 
 function createDataTable(tableId, items) {
@@ -255,15 +263,12 @@ async function saveData() {
       pressureIntake: collectTableData('pressureIntakeTable', dataStructure.pressureIntake),
       hzIntake: collectTableData('hzIntakeTable', dataStructure.hzIntake),
       wdc: collectTableData('wdcTable', dataStructure.wdc),
+      backwashFilter: collectTableData('backwashFilterTable', dataStructure.backwashFilter),
       kwhMeter: {
         wbp1: document.getElementById('kwhWBP1').value,
         lwbp1: document.getElementById('kwhLWBP1').value,
         lwbp2: document.getElementById('kwhLWBP2').value,
         total: document.getElementById('kwhTotal').value
-      },
-      backwashFilter: {
-        plan1: document.getElementById('backwashPlan1').value,
-        plan2: document.getElementById('backwashPlan2').value
       },
       totalWM: {
         airBaku: document.getElementById('totalWMAirBaku').value,
@@ -311,8 +316,6 @@ function clearForm() {
   document.getElementById('kwhLWBP1').value = '';
   document.getElementById('kwhLWBP2').value = '';
   document.getElementById('kwhTotal').value = '';
-  document.getElementById('backwashPlan1').value = '';
-  document.getElementById('backwashPlan2').value = '';
   document.getElementById('totalWMAirBaku').value = '';
   document.getElementById('totalWMAirBersih').value = '';
   document.getElementById('catatan').value = '';
