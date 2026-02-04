@@ -1,46 +1,93 @@
+// ==========================================
+// API CONFIGURATION
+// ==========================================
+const API_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID_HERE/exec';
 
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbxBjmPWeadl8RcLuwfgYD5Ifu9Pdf1ZKNRgORiAfMP9XGcgL1zc_vGd__442ChkrIaQeg/exec';
-
-// ==========================================
-// DATA STRUKTUR
+// DATA STRUKTUR - PARAMETER KUALITAS AIR
 // ==========================================
 const dataStructure = {
-  levelAir: [
-    { name: 'Air Baku Intake', satuan: 'Mdpl' },
-    { name: 'Reservoar', satuan: 'cm' }
+  'Kekeruhan': [
+    { name: 'Air Baku', satuan: 'NTU', std_min: 0, std_max: '' },
+    { name: 'Air Aerasi', satuan: 'NTU', std_min: 0, std_max: '' },
+    { name: 'SCADA Air Baku', satuan: 'NTU', std_min: 0, std_max: '' },
+    { name: 'Sedimentasi Plant 1', satuan: 'NTU', std_min: 0, std_max: 2 },
+    { name: 'Sedimentasi Plant 2', satuan: 'NTU', std_min: 0, std_max: 2 },
+    { name: 'Sedimentasi Plant 3', satuan: 'NTU', std_min: 0, std_max: 4 },
+    { name: 'Sedimentasi Plant 4', satuan: 'NTU', std_min: 0, std_max: 1.5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'NTU', std_min: 0, std_max: 1.5 },
+    { name: 'Outlet Filter Plant 2', satuan: 'NTU', std_min: 0, std_max: 1.5 },
+    { name: 'Outlet Filter Plant 3', satuan: 'NTU', std_min: 0, std_max: 1.5 },
+    { name: 'Outlet Filter Plant 4', satuan: 'NTU', std_min: 0, std_max: 1.5 },
+    { name: 'Reservoir', satuan: 'NTU', std_min: 0, std_max: 1.5 },
+    { name: 'Distribusi Campuran', satuan: 'NTU', std_min: 0, std_max: '' },
+    { name: 'SCADA Distribusi', satuan: 'NTU', std_min: 0, std_max: 1.5 }
   ],
-  flowDebit: [
-    { name: 'Inlet WTP', satuan: 'Lps' },
-    { name: 'Outlet WTP', satuan: 'Lps' }
+  'pH': [
+    { name: 'Air Baku', satuan: 'pH', std_min: 6, std_max: 9 },
+    { name: 'SCADA Air Baku', satuan: 'pH', std_min: 6, std_max: 9 },
+    { name: 'Sedimentasi Plant 1', satuan: 'pH', std_min: 6.5, std_max: 8 },
+    { name: 'Sedimentasi Plant 2', satuan: 'pH', std_min: 6.5, std_max: 8 },
+    { name: 'Sedimentasi Plant 3', satuan: 'pH', std_min: 6.5, std_max: 8 },
+    { name: 'Sedimentasi Plant 4', satuan: 'pH', std_min: 6.5, std_max: 7.5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'pH', std_min: 6.5, std_max: 7.5 },
+    { name: 'Outlet Filter Plant 2', satuan: 'pH', std_min: 6.5, std_max: 7.5 },
+    { name: 'Outlet Filter Plant 3', satuan: 'pH', std_min: 6.5, std_max: 8.5 },
+    { name: 'Outlet Filter Plant 4', satuan: 'pH', std_min: 6.5, std_max: 8.5 },
+    { name: 'Reservoir', satuan: 'pH', std_min: 6.5, std_max: 8.5 },
+    { name: 'Distribusi Campuran', satuan: 'pH', std_min: 6.5, std_max: 8.5 },
+    { name: 'SCADA Distribusi', satuan: 'pH', std_min: 6.5, std_max: 8.5 }
   ],
-  pressureDistribusi: [
-    { name: 'Pompa 1', satuan: 'Bar' },
-    { name: 'Pompa 2', satuan: 'Bar' },
-    { name: 'Pompa 3', satuan: 'Bar' }
+  'Temperatur': [
+    { name: 'Air Baku', satuan: '°C', std_min: '', std_max: '' },
+    { name: 'Udara', satuan: '°C', std_min: '', std_max: '' },
+    { name: 'Distribusi Campuran', satuan: '°C', std_min: '', std_max: '' },
+    { name: 'Udara (Distribusi)', satuan: '°C', std_min: '', std_max: '' }
   ],
-  hzDistribusi: [
-    { name: 'Pompa 1', satuan: 'Hz' },
-    { name: 'Pompa 2', satuan: 'Hz' },
-    { name: 'Pompa 3', satuan: 'Hz' }
+  'Warna': [
+    { name: 'Air Baku', satuan: 'PtCo', std_min: 0, std_max: '' },
+    { name: 'Distribusi Campuran', satuan: 'PtCo', std_min: 0, std_max: 10 }
   ],
-  pressureIntake: [
-    { name: 'Pompa 1', satuan: 'Bar' },
-    { name: 'Pompa 2', satuan: 'Bar' },
-    { name: 'Pompa 3', satuan: 'Bar' }
+  'DHL': [
+    { name: 'Air Baku', satuan: 'µS/cm', std_min: '', std_max: '' },
+    { name: 'Distribusi Campuran', satuan: 'µS/cm', std_min: '', std_max: '' }
   ],
-  hzIntake: [
-    { name: 'Pompa 1', satuan: 'Hz' },
-    { name: 'Pompa 2', satuan: 'Hz' },
-    { name: 'Pompa 3', satuan: 'Hz' }
+  'Ammonium': [
+    { name: 'Air Baku', satuan: 'mg/L', std_min: 0, std_max: 1 },
+    { name: 'Outlet Aerasi', satuan: 'mg/L', std_min: 0, std_max: 1.5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', std_min: 0, std_max: 1.5 },
+    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', std_min: 0, std_max: 1.5 },
+    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', std_min: 0, std_max: 1.5 },
+    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', std_min: 0, std_max: 1.5 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0, std_max: 1.5 }
   ],
-  wdc: [
-    { name: 'Level WDC (%)', satuan: 'Persen' },
-    { name: 'LPS OUT WDC', satuan: 'LPS' }
+  'Mangan': [
+    { name: 'Air Baku', satuan: 'mg/L', std_min: 0, std_max: 0.5 },
+    { name: 'Outlet Aerasi', satuan: 'mg/L', std_min: 0, std_max: 0.5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', std_min: 0, std_max: 0.4 },
+    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', std_min: 0, std_max: 0.4 },
+    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', std_min: 0, std_max: 0.4 },
+    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', std_min: 0, std_max: 0.4 },
+    { name: 'Reservoir', satuan: 'mg/L', std_min: 0, std_max: 0.1 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0, std_max: 0.1 }
   ],
-  backwashFilter: [
-    { name: 'Plan 1', satuan: 'Unit' },
-    { name: 'Plan 2', satuan: 'Unit' }
+  'Besi': [
+    { name: 'Air Baku', satuan: 'mg/L', std_min: 0, std_max: 5 },
+    { name: 'Outlet Aerasi', satuan: 'mg/L', std_min: 0, std_max: 5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', std_min: 0, std_max: 1 },
+    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', std_min: 0, std_max: 1 },
+    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', std_min: 0, std_max: 1 },
+    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', std_min: 0, std_max: 1 },
+    { name: 'Reservoir', satuan: 'mg/L', std_min: 0, std_max: 1 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0, std_max: 1 }
+  ],
+  'Sisa Chlor': [
+    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
+    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
+    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
+    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
+    { name: 'Reservoir', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 }
   ]
 };
 
@@ -50,12 +97,13 @@ const dataStructure = {
 let currentUser = null;
 let deferredPrompt = null;
 let selectedTimes = [];
+let autoSaveInterval = null;
 
 // ==========================================
 // INITIALIZATION
 // ==========================================
 window.onload = function() {
-  const savedUser = localStorage.getItem('currentUser');
+  const savedUser = localStorage.getItem('currentUser_kualitas');
   if(savedUser) {
     currentUser = JSON.parse(savedUser);
     showMainApp();
@@ -71,7 +119,146 @@ window.onload = function() {
   
   // Initialize selected times
   updateSelectedTimes();
+  
+  // Load draft if exists
+  loadDraft();
+  
+  // Start auto-save (every 30 seconds)
+  startAutoSave();
 };
+
+// ==========================================
+// AUTO-SAVE & DRAFT MANAGEMENT
+// ==========================================
+function startAutoSave() {
+  if(autoSaveInterval) {
+    clearInterval(autoSaveInterval);
+  }
+  
+  autoSaveInterval = setInterval(() => {
+    saveDraft(true);
+  }, 30000);
+}
+
+function saveDraft(silent = false) {
+  try {
+    const tanggal = document.getElementById('tanggal').value;
+    if(!tanggal) return;
+    
+    const draftData = collectFormData();
+    const draftKey = `draft_kualitas_${tanggal}`;
+    
+    localStorage.setItem(draftKey, JSON.stringify(draftData));
+    localStorage.setItem('lastDraftDate_kualitas', tanggal);
+    
+    if(!silent) {
+      showNotification('💾 Draft tersimpan!', 'success');
+    }
+    
+    updateDraftIndicator(true);
+  } catch(error) {
+    console.error('Error saving draft:', error);
+  }
+}
+
+function loadDraft() {
+  try {
+    const tanggal = document.getElementById('tanggal').value;
+    const draftKey = `draft_kualitas_${tanggal}`;
+    const draftData = localStorage.getItem(draftKey);
+    
+    if(draftData) {
+      const data = JSON.parse(draftData);
+      fillFormWithData(data);
+      updateDraftIndicator(true);
+      showNotification('📄 Draft ditemukan dan dimuat', 'info');
+    } else {
+      updateDraftIndicator(false);
+    }
+  } catch(error) {
+    console.error('Error loading draft:', error);
+  }
+}
+
+function deleteDraft() {
+  if(confirm('Hapus draft untuk tanggal ini?')) {
+    const tanggal = document.getElementById('tanggal').value;
+    const draftKey = `draft_kualitas_${tanggal}`;
+    localStorage.removeItem(draftKey);
+    updateDraftIndicator(false);
+    showNotification('Draft dihapus', 'success');
+  }
+}
+
+function updateDraftIndicator(hasDraft) {
+  const indicator = document.getElementById('draftIndicator');
+  if(indicator) {
+    if(hasDraft) {
+      indicator.style.display = 'inline-block';
+      indicator.textContent = '📝 Draft tersedia';
+    } else {
+      indicator.style.display = 'none';
+    }
+  }
+}
+
+function collectFormData() {
+  return {
+    hari: document.getElementById('hari').value,
+    tanggal: document.getElementById('tanggal').value,
+    operator: document.getElementById('operator').value,
+    shift: document.getElementById('shift').value,
+    kualitasData: collectTableData('kualitasAirTable'),
+    catatan: document.getElementById('catatan').value,
+    selectedTimes: selectedTimes
+  };
+}
+
+function fillFormWithData(data) {
+  document.getElementById('hari').value = data.hari || '';
+  document.getElementById('tanggal').value = data.tanggal || '';
+  document.getElementById('operator').value = data.operator || '';
+  document.getElementById('shift').value = data.shift || '';
+  document.getElementById('catatan').value = data.catatan || '';
+  
+  // Fill table data
+  if(data.kualitasData) {
+    fillTableData('kualitasAirTable', data.kualitasData);
+  }
+}
+
+function fillTableData(tableId, data) {
+  if(!data) return;
+  
+  for(const [paramGroup, items] of Object.entries(data)) {
+    for(const [itemName, timeData] of Object.entries(items)) {
+      for(const [time, value] of Object.entries(timeData)) {
+        const inputId = `${paramGroup}_${itemName}_${time.replace(':', '')}`.replace(/\s+/g, '_');
+        const input = document.getElementById(inputId);
+        if(input && value !== null && value !== undefined) {
+          input.value = value;
+        }
+      }
+    }
+  }
+}
+
+// ==========================================
+// DATE CHANGE HANDLER
+// ==========================================
+function onDateChange() {
+  const oldDate = localStorage.getItem('lastDraftDate_kualitas');
+  if(oldDate) {
+    saveDraft(true);
+  }
+  
+  const tanggalInput = document.getElementById('tanggal');
+  const date = new Date(tanggalInput.value + 'T00:00:00');
+  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  document.getElementById('hari').value = days[date.getDay()];
+  
+  loadDraft();
+}
 
 // ==========================================
 // PWA INSTALL
@@ -121,7 +308,7 @@ async function login() {
 
     if(result.success) {
       currentUser = result.data;
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
       showNotification('Login berhasil!', 'success');
       showMainApp();
     } else {
@@ -134,7 +321,7 @@ async function login() {
 
 function logout() {
   if(confirm('Yakin ingin logout?')) {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUser_kualitas');
     currentUser = null;
     document.getElementById('mainApp').classList.add('hidden');
     document.getElementById('loginScreen').classList.remove('hidden');
@@ -147,7 +334,6 @@ function showMainApp() {
   document.getElementById('mainApp').classList.remove('hidden');
   document.getElementById('userDisplay').textContent = `👤 ${currentUser.nama}`;
   
-  // Initialize tables
   initializeTables();
   loadHistory();
 }
@@ -162,28 +348,19 @@ function updateSelectedTimes() {
 }
 
 function initializeTables() {
-  // Add event listeners to time checkboxes
   document.querySelectorAll('.time-check').forEach(checkbox => {
     checkbox.addEventListener('change', updateSelectedTimes);
   });
   
-  // Initialize each table
-  createDataTable('levelAirTable', dataStructure.levelAir);
-  createDataTable('flowDebitTable', dataStructure.flowDebit);
-  createDataTable('pressureDistribusiTable', dataStructure.pressureDistribusi);
-  createDataTable('hzDistribusiTable', dataStructure.hzDistribusi);
-  createDataTable('pressureIntakeTable', dataStructure.pressureIntake);
-  createDataTable('hzIntakeTable', dataStructure.hzIntake);
-  createDataTable('wdcTable', dataStructure.wdc);
-  createDataTable('backwashFilterTable', dataStructure.backwashFilter);
+  createKualitasTable();
 }
 
-function createDataTable(tableId, items) {
-  const container = document.getElementById(tableId);
+function createKualitasTable() {
+  const container = document.getElementById('kualitasAirTable');
   if (!container) return;
   
   let html = '<table class="input-table"><thead><tr>';
-  html += '<th>Jenis Kegiatan</th><th>Satuan</th>';
+  html += '<th>Parameter</th><th>Jenis Sampel</th><th>Satuan</th><th>Min</th><th>Max</th>';
   
   selectedTimes.forEach(time => {
     html += `<th>${time}</th>`;
@@ -191,18 +368,27 @@ function createDataTable(tableId, items) {
   
   html += '</tr></thead><tbody>';
   
-  items.forEach((item, index) => {
-    html += `<tr>`;
-    html += `<td><strong>${item.name}</strong></td>`;
-    html += `<td>${item.satuan}</td>`;
-    
-    selectedTimes.forEach(time => {
-      const inputId = `${tableId}_${index}_${time.replace(':', '')}`;
-      html += `<td><input type="number" id="${inputId}" step="0.01" placeholder="0"></td>`;
+  for(const [paramGroup, items] of Object.entries(dataStructure)) {
+    items.forEach((item, index) => {
+      html += `<tr>`;
+      
+      if(index === 0) {
+        html += `<td rowspan="${items.length}"><strong>${paramGroup}</strong></td>`;
+      }
+      
+      html += `<td>${item.name}</td>`;
+      html += `<td>${item.satuan}</td>`;
+      html += `<td>${item.std_min !== '' ? item.std_min : '-'}</td>`;
+      html += `<td>${item.std_max !== '' ? item.std_max : '-'}</td>`;
+      
+      selectedTimes.forEach(time => {
+        const inputId = `${paramGroup}_${item.name}_${time.replace(':', '')}`.replace(/\s+/g, '_');
+        html += `<td><input type="number" id="${inputId}" step="0.01" placeholder="0"></td>`;
+      });
+      
+      html += `</tr>`;
     });
-    
-    html += `</tr>`;
-  });
+  }
   
   html += '</tbody></table>';
   container.innerHTML = html;
@@ -211,28 +397,32 @@ function createDataTable(tableId, items) {
 // ==========================================
 // COLLECT DATA FROM TABLES
 // ==========================================
-function collectTableData(tableId, items) {
+function collectTableData(tableId) {
   const data = {};
   
-  items.forEach((item, index) => {
-    data[item.name] = {};
+  for(const [paramGroup, items] of Object.entries(dataStructure)) {
+    data[paramGroup] = {};
     
-    selectedTimes.forEach(time => {
-      const inputId = `${tableId}_${index}_${time.replace(':', '')}`;
-      const input = document.getElementById(inputId);
-      if (input && input.value) {
-        data[item.name][time] = parseFloat(input.value);
-      }
+    items.forEach(item => {
+      data[paramGroup][item.name] = {};
+      
+      selectedTimes.forEach(time => {
+        const inputId = `${paramGroup}_${item.name}_${time.replace(':', '')}`.replace(/\s+/g, '_');
+        const input = document.getElementById(inputId);
+        if (input && input.value) {
+          data[paramGroup][item.name][time] = parseFloat(input.value);
+        }
+      });
     });
-  });
+  }
   
   return data;
 }
 
 // ==========================================
-// SAVE DATA
+// SAVE DATA - FINAL SUBMIT
 // ==========================================
-async function saveData() {
+async function saveDataFinal() {
   const hari = document.getElementById('hari').value;
   const tanggal = document.getElementById('tanggal').value;
 
@@ -240,47 +430,22 @@ async function saveData() {
     showNotification('Hari dan tanggal harus diisi!', 'error');
     return;
   }
+  
+  if(!confirm('Kirim laporan final ke Google Drive?\n\nSetelah dikirim, draft akan dihapus.')) {
+    return;
+  }
 
-  const saveBtn = document.getElementById('saveBtn');
+  const saveBtn = document.getElementById('saveFinalBtn');
   saveBtn.disabled = true;
-  saveBtn.textContent = '⏳ Menyimpan...';
+  saveBtn.textContent = '⏳ Mengirim ke Google Drive...';
 
   try {
-    // Collect all data - HAPUS halaman & revisi
-    const reportData = {
-      hari: hari,
-      tanggal: tanggal,
-      // halaman & revisi DIHAPUS
-      operator: {
-        shift1: document.getElementById('operatorShift1').value,
-        shift2: document.getElementById('operatorShift2').value
-      },
-      levelAir: collectTableData('levelAirTable', dataStructure.levelAir),
-      flowDebit: collectTableData('flowDebitTable', dataStructure.flowDebit),
-      pressureDistribusi: collectTableData('pressureDistribusiTable', dataStructure.pressureDistribusi),
-      hzDistribusi: collectTableData('hzDistribusiTable', dataStructure.hzDistribusi),
-      pressureIntake: collectTableData('pressureIntakeTable', dataStructure.pressureIntake),
-      hzIntake: collectTableData('hzIntakeTable', dataStructure.hzIntake),
-      wdc: collectTableData('wdcTable', dataStructure.wdc),
-      backwashFilter: collectTableData('backwashFilterTable', dataStructure.backwashFilter),
-      kwhMeter: {
-        wbp1: document.getElementById('kwhWBP1').value,
-        lwbp1: document.getElementById('kwhLWBP1').value,
-        lwbp2: document.getElementById('kwhLWBP2').value,
-        total: document.getElementById('kwhTotal').value
-      },
-      totalWM: {
-        airBaku: document.getElementById('totalWMAirBaku').value,
-        airBersih: document.getElementById('totalWMAirBersih').value
-      },
-      catatan: document.getElementById('catatan').value,
-      selectedTimes: selectedTimes
-    };
+    const reportData = collectFormData();
 
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
-        action: 'saveProductionReport',
+        action: 'saveQualityReport',
         userId: currentUser.userId,
         reportData: reportData
       })
@@ -289,17 +454,22 @@ async function saveData() {
     const result = await response.json();
 
     if(result.success) {
-      showNotification('✓ Laporan berhasil disimpan!', 'success');
+      showNotification('✓ Laporan berhasil dikirim ke Google Drive!', 'success');
+      
+      const draftKey = `draft_kualitas_${tanggal}`;
+      localStorage.removeItem(draftKey);
+      updateDraftIndicator(false);
+      
       clearForm();
       loadHistory();
     } else {
-      showNotification('Gagal simpan: ' + result.message, 'error');
+      showNotification('Gagal kirim: ' + result.message, 'error');
     }
   } catch(error) {
     showNotification('Error: ' + error.message, 'error');
   } finally {
     saveBtn.disabled = false;
-    saveBtn.textContent = '💾 Simpan Laporan';
+    saveBtn.textContent = '📤 Kirim ke Google Drive';
   }
 }
 
@@ -309,20 +479,15 @@ function clearForm() {
   
   document.getElementById('hari').value = days[today.getDay()];
   document.getElementById('tanggal').valueAsDate = today;
-  document.getElementById('operatorShift1').value = '';
-  document.getElementById('operatorShift2').value = '';
-  document.getElementById('kwhWBP1').value = '';
-  document.getElementById('kwhLWBP1').value = '';
-  document.getElementById('kwhLWBP2').value = '';
-  document.getElementById('kwhTotal').value = '';
-  document.getElementById('totalWMAirBaku').value = '';
-  document.getElementById('totalWMAirBersih').value = '';
+  document.getElementById('operator').value = '';
+  document.getElementById('shift').value = '';
   document.getElementById('catatan').value = '';
   
-  // Clear all table inputs
   document.querySelectorAll('.input-table input').forEach(input => {
     input.value = '';
   });
+  
+  updateDraftIndicator(false);
 }
 
 // ==========================================
@@ -336,7 +501,7 @@ async function loadHistory() {
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
-        action: 'getProductionHistory',
+        action: 'getQualityHistory',
         userId: currentUser.userId,
         role: currentUser.role,
         limit: 50
@@ -364,7 +529,7 @@ async function loadHistory() {
               <span class="status-badge status-aktif">📄 Laporan</span>
             </div>
             <div class="history-name">${record.hari}, ${record.tanggal}</div>
-            <div class="history-id">Operator: ${record.operator.shift1}</div>
+            <div class="history-id">Operator: ${record.operator}</div>
           </div>
         `;
       });
@@ -380,7 +545,6 @@ async function loadHistory() {
 
 function viewDetail(recordId) {
   showNotification('Detail untuk ' + recordId, 'success');
-  // Implement detail view later
 }
 
 // ==========================================
@@ -415,8 +579,6 @@ function showNotification(message, type = 'success') {
   }, 3000);
 }
 
-// Request notification permission
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
-
