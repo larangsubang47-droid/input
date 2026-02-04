@@ -1,0 +1,436 @@
+[
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Air Baku",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Air Aerasi",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "SCADA Air Baku",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Sedimentasi Plant 1",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 2.0
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Sedimentasi Plant 2",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 2.0
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Sedimentasi Plant 3",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 4.0
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Sedimentasi Plant 4",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Outlet Filter Plant 1",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Outlet Filter Plant 2",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Outlet Filter Plant 3",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Outlet Filter Plant 4",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Reservoir",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Kekeruhan",
+    "jenis_sampel": "SCADA Distribusi",
+    "satuan": "NTU",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Air Baku",
+    "satuan": "pH",
+    "std_min": 6.0,
+    "std_max": 9.0
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "SCADA Air Baku",
+    "satuan": "pH",
+    "std_min": 6.0,
+    "std_max": 9.0
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Sedimentasi Plant 1",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 8.0
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Sedimentasi Plant 2",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 8.0
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Sedimentasi Plant 3",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 8.0
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Sedimentasi Plant 4",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 7.5
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Outlet Filter Plant 1",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 7.5
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Outlet Filter Plant 2",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 7.5
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Outlet Filter Plant 3",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 8.5
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Outlet Filter Plant 4",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 8.5
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Reservoir",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 8.5
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 8.5
+  },
+  {
+    "parameter": "pH",
+    "jenis_sampel": "SCADA Distribusi",
+    "satuan": "pH",
+    "std_min": 6.5,
+    "std_max": 8.5
+  },
+  {
+    "parameter": "Temperatur",
+    "jenis_sampel": "Air Baku",
+    "satuan": "\u00b0C",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Temperatur",
+    "jenis_sampel": "Udara",
+    "satuan": "\u00b0C",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Temperatur",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "\u00b0C",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Temperatur",
+    "jenis_sampel": "Udara",
+    "satuan": "\u00b0C",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Warna",
+    "jenis_sampel": "Air Baku",
+    "satuan": "PtCo",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Warna",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "PtCo",
+    "std_min": "",
+    "std_max": 10.0
+  },
+  {
+    "parameter": "DHL",
+    "jenis_sampel": "Air Baku",
+    "satuan": "\u00b5S/cm",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "DHL",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "\u00b5S/cm",
+    "std_min": "",
+    "std_max": ""
+  },
+  {
+    "parameter": "Ammonium",
+    "jenis_sampel": "Air Baku",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 1.0
+  },
+  {
+    "parameter": "Ammonium",
+    "jenis_sampel": "Outlet Aerasi",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Ammonium",
+    "jenis_sampel": "Outlet Filter Plant 1",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Ammonium",
+    "jenis_sampel": "Outlet Filter Plant 2",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Ammonium",
+    "jenis_sampel": "Outlet Filter Plant 3",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Ammonium",
+    "jenis_sampel": "Outlet Filter Plant 4",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Ammonium",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 1.5
+  },
+  {
+    "parameter": "Mangan",
+    "jenis_sampel": "Air Baku",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.5
+  },
+  {
+    "parameter": "Mangan",
+    "jenis_sampel": "Outlet Aerasi",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.5
+  },
+  {
+    "parameter": "Mangan",
+    "jenis_sampel": "Outlet Filter Plant 1",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.4
+  },
+  {
+    "parameter": "Mangan",
+    "jenis_sampel": "Outlet Filter Plant 2",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.4
+  },
+  {
+    "parameter": "Mangan",
+    "jenis_sampel": "Outlet Filter Plant 3",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.4
+  },
+  {
+    "parameter": "Mangan",
+    "jenis_sampel": "Outlet Filter Plant 4",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.4
+  },
+  {
+    "parameter": "Mangan",
+    "jenis_sampel": "Reservoir",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.1
+  },
+  {
+    "parameter": "Mangan",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.1
+  },
+  {
+    "parameter": "Detergen",
+    "jenis_sampel": "Air Baku",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.1
+  },
+  {
+    "parameter": "Detergen",
+    "jenis_sampel": "Air Aerasi",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.1
+  },
+  {
+    "parameter": "Detergen",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.05
+  },
+  {
+    "parameter": "DO",
+    "jenis_sampel": "Air Baku",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 5.0
+  },
+  {
+    "parameter": "DO",
+    "jenis_sampel": "Air Aerasi",
+    "satuan": "mg/L",
+    "std_min": 2.0,
+    "std_max": 7.0
+  },
+  {
+    "parameter": "Besi",
+    "jenis_sampel": "Air Baku",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 2.0
+  },
+  {
+    "parameter": "Besi",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 2.0
+  },
+  {
+    "parameter": "Alumunium",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": 0.2
+  },
+  {
+    "parameter": "Free Chlorine",
+    "jenis_sampel": "Reservoir",
+    "satuan": "mg/L",
+    "std_min": 0.2,
+    "std_max": 0.5
+  },
+  {
+    "parameter": "Free Chlorine",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "mg/L",
+    "std_min": 0.2,
+    "std_max": 0.5
+  },
+  {
+    "parameter": "Free Chlorine",
+    "jenis_sampel": "SCADA Distribusi",
+    "satuan": "mg/L",
+    "std_min": 0.2,
+    "std_max": 0.5
+  },
+  {
+    "parameter": "Total Chlorine",
+    "jenis_sampel": "Distribusi Campuran",
+    "satuan": "mg/L",
+    "std_min": "",
+    "std_max": ""
+  }
+]
