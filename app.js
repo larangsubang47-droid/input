@@ -1,7 +1,7 @@
 // ==========================================
 // API CONFIGURATION
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbw8r-ubStcSwSzRTLIId46FfRCkezILrLkC0veNQBlOuaryp2I-BNTT_rWJvl--lMgIKQ/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzkQheaZxuWVPF3PlKMCEj-acIHddIynoPNthSuds3eTokwozi_pL6HKavg1bw11ArvGQ/exec';
 
 // ==========================================
 // DA// ==========================================
@@ -705,3 +705,4 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
+
