@@ -107,6 +107,16 @@ window.onload = function() {
   if(savedUser) {
     currentUser = JSON.parse(savedUser);
     showMainApp();
+  } else {
+    // FOR TESTING: Auto create dummy user
+    // HAPUS INI di production
+    currentUser = {
+      userId: 'TEST001',
+      nama: 'User Test',
+      role: 'user'
+    };
+    localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
+    showMainApp();
   }
   
   // Set default date to today
@@ -121,7 +131,9 @@ window.onload = function() {
   updateSelectedTimes();
   
   // Load draft if exists
-  loadDraft();
+  setTimeout(() => {
+    loadDraft();
+  }, 200);
   
   // Start auto-save (every 30 seconds)
   startAutoSave();
@@ -334,7 +346,14 @@ function showMainApp() {
   document.getElementById('mainApp').classList.remove('hidden');
   document.getElementById('userDisplay').textContent = `👤 ${currentUser.nama}`;
   
-  initializeTables();
+  // Force update selected times first
+  updateSelectedTimes();
+  
+  // Then initialize tables
+  setTimeout(() => {
+    initializeTables();
+  }, 100);
+  
   loadHistory();
 }
 
