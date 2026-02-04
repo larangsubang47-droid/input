@@ -1,7 +1,7 @@
 // ==========================================
 // API CONFIGURATION
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID_HERE/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzdxkbt3HBIxlm4Z3cMOIWsxklpUPLmxAatT5SdcfaKEbvTNH7anSHgLLeIWPf7YinvEQ/exec';
 
 // ==========================================
 // DATA STRUKTUR - PARAMETER KUALITAS AIR
@@ -684,3 +684,4 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
+
