@@ -107,16 +107,6 @@ window.onload = function() {
   if(savedUser) {
     currentUser = JSON.parse(savedUser);
     showMainApp();
-  } else {
-    // FOR TESTING: Auto create dummy user
-    // HAPUS INI di production
-    currentUser = {
-      userId: 'TEST001',
-      nama: 'User Test',
-      role: 'user'
-    };
-    localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
-    showMainApp();
   }
   
   // Set default date to today
