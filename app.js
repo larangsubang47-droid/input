@@ -1,7 +1,7 @@
 // ==========================================
 // API CONFIGURATION
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbx1Wdmne5c14PUYG3EUDraZtBuAzg6-JMMiee8qJsvIDC2D8nSSh-ifwRsBMj4zuCiaIQ/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbw8r-ubStcSwSzRTLIId46FfRCkezILrLkC0veNQBlOuaryp2I-BNTT_rWJvl--lMgIKQ/exec';
 
 // ==========================================
 // DATA STRUKTUR - PARAMETER KUALITAS AIR
@@ -619,4 +619,5 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
+
 
