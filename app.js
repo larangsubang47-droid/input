@@ -476,37 +476,8 @@ async function saveDataFinal() {
   try {
     const reportData = collectFormData();
 
-    // OFFLINE MODE - Simpan ke localStorage
-    const offlineReports = JSON.parse(localStorage.getItem('offline_reports_kualitas') || '[]');
-    const recordId = 'RPT' + Date.now();
-    
-    offlineReports.push({
-      recordId: recordId,
-      userId: currentUser.userId,
-      hari: reportData.hari,
-      tanggal: reportData.tanggal,
-      operator: reportData.operator,
-      shift: reportData.shift,
-      reportData: reportData,
-      createdAt: new Date().toISOString()
-    });
-    
-    localStorage.setItem('offline_reports_kualitas', JSON.stringify(offlineReports));
-    
-    showNotification('✓ Laporan tersimpan! (Offline Mode)', 'success');
-    
-    const draftKey = `draft_kualitas_${tanggal}`;
-    localStorage.removeItem(draftKey);
-    updateDraftIndicator(false);
-    
-    clearForm();
-    loadHistory();
-    
-    saveBtn.disabled = false;
-    saveBtn.textContent = '📤 Kirim ke Google Drive';
-    return;
+    // ONLINE MODE - Kirim ke Google Drive
 
-    // Online mode - code dibawah ini tidak akan dijalankan di offline mode
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -563,43 +534,7 @@ async function loadHistory() {
   historyList.innerHTML = '<div class="loading"><div class="spinner"></div>Memuat data...</div>';
 
   try {
-    // OFFLINE MODE - Load dari localStorage
-    const offlineReports = JSON.parse(localStorage.getItem('offline_reports_kualitas') || '[]');
-    
-    if(offlineReports.length === 0) {
-      historyList.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">Belum ada laporan (Offline Mode)</div>';
-      return;
-    }
-
-    // Filter by user role
-    let records = offlineReports;
-    if(currentUser.role !== 'admin') {
-      records = offlineReports.filter(r => r.userId === currentUser.userId);
-    }
-    
-    // Sort by date (newest first)
-    records.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
-    let html = '';
-    records.forEach(record => {
-      const date = new Date(record.createdAt).toLocaleString('id-ID');
-      
-      html += `
-        <div class="history-item" onclick="viewDetail('${record.recordId}')">
-          <div class="history-header">
-            <span class="history-date">${date}</span>
-            <span class="status-badge status-aktif">📄 Offline</span>
-          </div>
-          <div class="history-name">${record.hari}, ${record.tanggal}</div>
-          <div class="history-id">Operator: ${record.operator || '-'}</div>
-        </div>
-      `;
-    });
-
-    historyList.innerHTML = html;
-    return;
-    
-    // Online mode - code dibawah tidak akan dijalankan
+    // ONLINE MODE - Load dari Google Drive
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -684,4 +619,3 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
-
