@@ -1,11 +1,11 @@
 {
-  "name": "Laporan Produksi Air Bersih - Jasa Tirta Luhur",
-  "short_name": "Produksi Air",
-  "description": "Aplikasi pelaporan produksi air bersih untuk Jasa Tirta Luhur",
+  "name": "Laporan Kualitas Air - Jasa Tirta Luhur",
+  "short_name": "Kualitas Air",
+  "description": "Aplikasi pelaporan kualitas air baku dan air bersih untuk Jasa Tirta Luhur",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#1976d2",
-  "theme_color": "#1976d2",
+  "background_color": "#00897b",
+  "theme_color": "#00897b",
   "orientation": "portrait",
   "icons": [
     {
@@ -27,7 +27,7 @@
     {
       "name": "Input Laporan Baru",
       "short_name": "Input",
-      "description": "Buat laporan produksi baru",
+      "description": "Buat laporan kualitas baru",
       "url": "/index.html",
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     }
