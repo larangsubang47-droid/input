@@ -296,6 +296,31 @@ async function login() {
     return;
   }
 
+  // OFFLINE MODE - Hardcoded login untuk testing
+  // Hapus ini kalau sudah ada backend
+  if(username === 'admin' && password === 'admin123') {
+    currentUser = {
+      userId: 'ADM001',
+      nama: 'Administrator',
+      role: 'admin'
+    };
+    localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
+    showNotification('Login berhasil! (Offline Mode)', 'success');
+    showMainApp();
+    return;
+  } else if(username === 'user' && password === 'user123') {
+    currentUser = {
+      userId: 'USR001',
+      nama: 'User Operator',
+      role: 'user'
+    };
+    localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
+    showNotification('Login berhasil! (Offline Mode)', 'success');
+    showMainApp();
+    return;
+  }
+
+  // Online mode - pakai backend API
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
@@ -317,7 +342,7 @@ async function login() {
       showNotification(result.message, 'error');
     }
   } catch(error) {
-    showNotification('Gagal connect ke server: ' + error.message, 'error');
+    showNotification('Username/password salah (Offline Mode aktif)', 'error');
   }
 }
 
@@ -451,6 +476,37 @@ async function saveDataFinal() {
   try {
     const reportData = collectFormData();
 
+    // OFFLINE MODE - Simpan ke localStorage
+    const offlineReports = JSON.parse(localStorage.getItem('offline_reports_kualitas') || '[]');
+    const recordId = 'RPT' + Date.now();
+    
+    offlineReports.push({
+      recordId: recordId,
+      userId: currentUser.userId,
+      hari: reportData.hari,
+      tanggal: reportData.tanggal,
+      operator: reportData.operator,
+      shift: reportData.shift,
+      reportData: reportData,
+      createdAt: new Date().toISOString()
+    });
+    
+    localStorage.setItem('offline_reports_kualitas', JSON.stringify(offlineReports));
+    
+    showNotification('✓ Laporan tersimpan! (Offline Mode)', 'success');
+    
+    const draftKey = `draft_kualitas_${tanggal}`;
+    localStorage.removeItem(draftKey);
+    updateDraftIndicator(false);
+    
+    clearForm();
+    loadHistory();
+    
+    saveBtn.disabled = false;
+    saveBtn.textContent = '📤 Kirim ke Google Drive';
+    return;
+
+    // Online mode - code dibawah ini tidak akan dijalankan di offline mode
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -507,6 +563,43 @@ async function loadHistory() {
   historyList.innerHTML = '<div class="loading"><div class="spinner"></div>Memuat data...</div>';
 
   try {
+    // OFFLINE MODE - Load dari localStorage
+    const offlineReports = JSON.parse(localStorage.getItem('offline_reports_kualitas') || '[]');
+    
+    if(offlineReports.length === 0) {
+      historyList.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">Belum ada laporan (Offline Mode)</div>';
+      return;
+    }
+
+    // Filter by user role
+    let records = offlineReports;
+    if(currentUser.role !== 'admin') {
+      records = offlineReports.filter(r => r.userId === currentUser.userId);
+    }
+    
+    // Sort by date (newest first)
+    records.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    let html = '';
+    records.forEach(record => {
+      const date = new Date(record.createdAt).toLocaleString('id-ID');
+      
+      html += `
+        <div class="history-item" onclick="viewDetail('${record.recordId}')">
+          <div class="history-header">
+            <span class="history-date">${date}</span>
+            <span class="status-badge status-aktif">📄 Offline</span>
+          </div>
+          <div class="history-name">${record.hari}, ${record.tanggal}</div>
+          <div class="history-id">Operator: ${record.operator || '-'}</div>
+        </div>
+      `;
+    });
+
+    historyList.innerHTML = html;
+    return;
+    
+    // Online mode - code dibawah tidak akan dijalankan
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
