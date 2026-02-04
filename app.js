@@ -4,8 +4,8 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbw8r-ubStcSwSzRTLIId46FfRCkezILrLkC0veNQBlOuaryp2I-BNTT_rWJvl--lMgIKQ/exec';
 
 // ==========================================
-// DATA STRUKTUR - PARAMETER KUALITAS AIR
-// ==========================================
+// DA// ==========================================
+
 const dataStructure = {
   'Kekeruhan': [
     { name: 'Air Baku', satuan: 'NTU', std_min: 0, std_max: '' },
@@ -232,14 +232,15 @@ function fillFormWithData(data) {
 function fillTableData(tableId, data) {
   if(!data) return;
   
-  for(const [paramGroup, items] of Object.entries(data)) {
-    for(const [itemName, timeData] of Object.entries(items)) {
-      for(const [time, value] of Object.entries(timeData)) {
-        const inputId = `${paramGroup}_${itemName}_${time.replace(':', '')}`.replace(/\s+/g, '_');
-        const input = document.getElementById(inputId);
-        if(input && value !== null && value !== undefined) {
-          input.value = value;
-        }
+  // Data format: { "Kekeruhan_Air Baku": { "08:00": 5.2 }, ... }
+  for(const [key, timeData] of Object.entries(data)) {
+    // Parse key untuk mendapatkan parameter dan item name
+    // Key format: "PARAMETER_Jenis Sampel"
+    for(const [time, value] of Object.entries(timeData)) {
+      const inputId = `${key}_${time.replace(':', '')}`.replace(/\s+/g, '_');
+      const input = document.getElementById(inputId);
+      if(input && value !== null && value !== undefined) {
+        input.value = value;
       }
     }
   }
@@ -434,17 +435,22 @@ function createKualitasTable() {
 function collectTableData(tableId) {
   const data = {};
   
+  // FORMAT YANG BENAR UNTUK BACKEND:
+  // Key format: "PARAMETER_Jenis Sampel" (dengan underscore)
+  // Value: { "08:00": value, "12:00": value }
+  
   for(const [paramGroup, items] of Object.entries(dataStructure)) {
-    data[paramGroup] = {};
-    
     items.forEach(item => {
-      data[paramGroup][item.name] = {};
+      // Buat key dengan format: "Parameter_Jenis Sampel"
+      const key = `${paramGroup}_${item.name}`;
+      data[key] = {};
       
       selectedTimes.forEach(time => {
         const inputId = `${paramGroup}_${item.name}_${time.replace(':', '')}`.replace(/\s+/g, '_');
         const input = document.getElementById(inputId);
         if (input && input.value) {
-          data[paramGroup][item.name][time] = parseFloat(input.value);
+          // Simpan dengan key waktu asli (dengan titik dua)
+          data[key][time] = parseFloat(input.value);
         }
       });
     });
@@ -475,9 +481,51 @@ async function saveDataFinal() {
 
   try {
     const reportData = collectFormData();
+    
+    // DEBUG: Log data yang akan dikirim
+    console.log('=== DATA YANG AKAN DIKIRIM ===');
+    console.log('selectedTimes:', reportData.selectedTimes);
+    console.log('kualitasData keys:', Object.keys(reportData.kualitasData));
+    console.log('Sample data:', JSON.stringify(reportData.kualitasData, null, 2).substring(0, 500));
+    console.log('Full reportData:', reportData);
 
-    // ONLINE MODE - Kirim ke Google Drive
+    // Cek apakah API_URL sudah diisi
+    if(!API_URL || API_URL.includes('YOUR_DEPLOYMENT_ID_HERE')) {
+      console.warn('API_URL belum dikonfigurasi, menggunakan OFFLINE MODE');
+      
+      // OFFLINE MODE - Simpan ke localStorage
+      const offlineReports = JSON.parse(localStorage.getItem('offline_reports_kualitas') || '[]');
+      const recordId = 'RPT' + Date.now();
+      
+      offlineReports.push({
+        recordId: recordId,
+        userId: currentUser.userId,
+        hari: reportData.hari,
+        tanggal: reportData.tanggal,
+        operator: reportData.operator,
+        shift: reportData.shift,
+        reportData: reportData,
+        createdAt: new Date().toISOString()
+      });
+      
+      localStorage.setItem('offline_reports_kualitas', JSON.stringify(offlineReports));
+      
+      showNotification('✓ Laporan tersimpan! (Offline Mode)', 'success');
+      
+      const draftKey = `draft_kualitas_${tanggal}`;
+      localStorage.removeItem(draftKey);
+      updateDraftIndicator(false);
+      
+      clearForm();
+      loadHistory();
+      
+      saveBtn.disabled = false;
+      saveBtn.textContent = '📤 Kirim ke Google Drive';
+      return;
+    }
 
+    // ONLINE MODE - Kirim ke Google Apps Script
+    console.log('Mengirim ke API:', API_URL);
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -488,6 +536,7 @@ async function saveDataFinal() {
     });
 
     const result = await response.json();
+    console.log('Response dari server:', result);
 
     if(result.success) {
       showNotification('✓ Laporan berhasil dikirim ke Google Drive!', 'success');
@@ -502,6 +551,7 @@ async function saveDataFinal() {
       showNotification('Gagal kirim: ' + result.message, 'error');
     }
   } catch(error) {
+    console.error('Error saat menyimpan:', error);
     showNotification('Error: ' + error.message, 'error');
   } finally {
     saveBtn.disabled = false;
@@ -534,7 +584,43 @@ async function loadHistory() {
   historyList.innerHTML = '<div class="loading"><div class="spinner"></div>Memuat data...</div>';
 
   try {
-    // ONLINE MODE - Load dari Google Drive
+    // OFFLINE MODE - Load dari localStorage
+    const offlineReports = JSON.parse(localStorage.getItem('offline_reports_kualitas') || '[]');
+    
+    if(offlineReports.length === 0) {
+      historyList.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">Belum ada laporan (Offline Mode)</div>';
+      return;
+    }
+
+    // Filter by user role
+    let records = offlineReports;
+    if(currentUser.role !== 'admin') {
+      records = offlineReports.filter(r => r.userId === currentUser.userId);
+    }
+    
+    // Sort by date (newest first)
+    records.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    let html = '';
+    records.forEach(record => {
+      const date = new Date(record.createdAt).toLocaleString('id-ID');
+      
+      html += `
+        <div class="history-item" onclick="viewDetail('${record.recordId}')">
+          <div class="history-header">
+            <span class="history-date">${date}</span>
+            <span class="status-badge status-aktif">📄 Offline</span>
+          </div>
+          <div class="history-name">${record.hari}, ${record.tanggal}</div>
+          <div class="history-id">Operator: ${record.operator || '-'}</div>
+        </div>
+      `;
+    });
+
+    historyList.innerHTML = html;
+    return;
+    
+    // Online mode - code dibawah tidak akan dijalankan
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -619,5 +705,3 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
-
-
