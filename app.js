@@ -153,6 +153,13 @@ function saveDraft(silent = false) {
     
     const draftData = collectFormData();
     
+    // ✅ DEBUGGING: Log data yang akan disimpan
+    console.log('📝 Saving draft:', {
+      selectedTimes: draftData.selectedTimes,
+      timeDataKeys: Object.keys(draftData.timeData || {}),
+      sampleData: draftData.timeData
+    });
+    
     // ✅ BARU: Tambah info updater
     draftData.updatedBy = currentUser.nama || currentUser.username;
     draftData.updatedAt = new Date().toISOString();
@@ -182,8 +189,19 @@ function loadDraft() {
     const draftKey = `draft_kualitas_${tanggal}`;
     const draftData = localStorage.getItem(draftKey);
     
+    // ✅ DEBUGGING: Log data yang dimuat
+    console.log('📂 Loading draft for:', tanggal);
+    console.log('📂 Draft key:', draftKey);
+    
     if(draftData) {
       const data = JSON.parse(draftData);
+      
+      console.log('✅ Draft found:', {
+        selectedTimes: data.selectedTimes,
+        timeDataKeys: Object.keys(data.timeData || {}),
+        hasTimeData: !!data.timeData
+      });
+      
       fillFormWithData(data);
       updateDraftIndicator(true);
       
@@ -195,6 +213,7 @@ function loadDraft() {
         showNotification('📄 Draft ditemukan dan dimuat', 'info');
       }
     } else {
+      console.log('❌ No draft found');
       updateDraftIndicator(false);
     }
   } catch(error) {
@@ -272,25 +291,40 @@ function fillFormWithData(data) {
   if(data.selectedTimes) {
     selectedTimes = data.selectedTimes;
     updateSelectedTimes();
-  }
-  
-  if(data.timeData) {
-    Object.keys(data.timeData).forEach(time => {
-      Object.keys(data.timeData[time]).forEach(param => {
-        Object.keys(data.timeData[time][param]).forEach(sampleName => {
-          const key = `${param}_${sampleName}`;
-          const inputId = `input_${key}_${time}`;
-          const input = document.getElementById(inputId);
-          
-          if(input) {
-            input.value = data.timeData[time][param][sampleName];
-          }
+    
+    // ✅ PERBAIKAN: Tunggu input table terbentuk dulu
+    setTimeout(() => {
+      if(data.timeData) {
+        let filledCount = 0;
+        let notFoundCount = 0;
+        
+        Object.keys(data.timeData).forEach(time => {
+          Object.keys(data.timeData[time]).forEach(param => {
+            Object.keys(data.timeData[time][param]).forEach(sampleName => {
+              const key = `${param}_${sampleName}`;
+              const inputId = `input_${key}_${time}`;
+              const input = document.getElementById(inputId);
+              
+              if(input) {
+                input.value = data.timeData[time][param][sampleName];
+                if(data.timeData[time][param][sampleName]) {
+                  filledCount++;
+                }
+              } else {
+                notFoundCount++;
+                console.warn('⚠️ Input not found:', inputId);
+              }
+            });
+          });
         });
-      });
-    });
+        
+        console.log(`✅ Filled ${filledCount} fields, ${notFoundCount} not found`);
+      }
+      updateValidationStatus();
+    }, 100);
+  } else {
+    updateValidationStatus();
   }
-  
-  updateValidationStatus(); // ✅ BARU: Update status setelah load
 }
 
 // ==========================================
