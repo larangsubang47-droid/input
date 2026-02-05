@@ -1,7 +1,7 @@
 // ==========================================
 // API CONFIGURATION
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbzkQheaZxuWVPF3PlKMCEj-acIHddIynoPNthSuds3eTokwozi_pL6HKavg1bw11ArvGQ/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzWzlpXePvV83_aLfet5llTpsU5QvVZxrgd_AONgMHGahy_QkqzhKtZ5pd2gSsXRe5gRg/exec';
 
 // ==========================================
 // DATA STRUCTURE
@@ -1038,3 +1038,4 @@ async function loadDraftFromServer() {
     console.log('Error loading draft from server:', error);
   }
 }
+
