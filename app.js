@@ -1,7 +1,7 @@
 // ==========================================
 // API CONFIGURATION
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbw4eRVuLgB59G4gYVNucMlIXZ8srHvX5LUgBYnPPJHiPXdORZag0B5Z9uIxRh6rKbAFfQ/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzkQheaZxuWVPF3PlKMCEj-acIHddIynoPNthSuds3eTokwozi_pL6HKavg1bw11ArvGQ/exec';
 
 // ==========================================
 // DATA STRUCTURE
@@ -673,24 +673,8 @@ async function handleLogin(event) {
   loginBtn.textContent = 'Memproses...';
   
   try {
-    // OFFLINE MODE - Bypass login check
-    const offlineUser = {
-      userId: 'offline_' + Date.now(),
-      username: username,
-      nama: username,
-      role: 'operator'
-    };
+    // ✅ ONLINE MODE - Panggil API untuk login
     
-    currentUser = offlineUser;
-    localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
-    showMainApp();
-    showNotification('Login berhasil! (Offline Mode)', 'success');
-    
-    loginBtn.disabled = false;
-    loginBtn.textContent = 'Masuk';
-    return;
-    
-    // ONLINE MODE - code dibawah tidak akan dijalankan
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -703,10 +687,15 @@ async function handleLogin(event) {
     const result = await response.json();
     
     if(result.success) {
-      currentUser = result.data.user;
+      currentUser = result.data;
       localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
       showMainApp();
       showNotification('Login berhasil!', 'success');
+      
+      // ✅ Load draft setelah login
+      setTimeout(() => {
+        loadDraftFromServer();
+      }, 500);
     } else {
       showNotification('Login gagal: ' + result.message, 'error');
     }
@@ -990,4 +979,62 @@ if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
 
-
+// ==========================================
+// ✅ NEW: LOAD DRAFT FROM SERVER
+// ==========================================
+async function loadDraftFromServer() {
+  if(!currentUser) return;
+  
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'loadDraft',
+        userId: currentUser.userId
+      })
+    });
+    
+    const result = await response.json();
+    
+    if(result.success && result.data.draftData) {
+      const draftData = result.data.draftData;
+      console.log('✅ Draft loaded from server:', draftData);
+      
+      // Populate form dengan draft data
+      if(draftData.hari) document.getElementById('hari').value = draftData.hari;
+      if(draftData.tanggal) document.getElementById('tanggal').value = draftData.tanggal;
+      if(draftData.operator) document.getElementById('operator').value = draftData.operator;
+      if(draftData.shift) document.getElementById('shift').value = draftData.shift;
+      if(draftData.catatan) document.getElementById('catatan').value = draftData.catatan;
+      
+      // Set selected times
+      if(draftData.selectedTimes && draftData.selectedTimes.length > 0) {
+        selectedTimes = draftData.selectedTimes;
+        updateSelectedTimes();
+        generateInputTable();
+      }
+      
+      // Populate timeData
+      if(draftData.timeData) {
+        setTimeout(() => {
+          Object.keys(draftData.timeData).forEach(key => {
+            Object.keys(draftData.timeData[key]).forEach(time => {
+              const inputId = `input_${key}_${time}`;
+              const input = document.getElementById(inputId);
+              if(input) {
+                input.value = draftData.timeData[key][time];
+              }
+            });
+          });
+          showNotification('📂 Draft dimuat dari server!', 'info');
+        }, 200);
+      }
+      
+      updateDraftIndicator(true);
+    } else {
+      console.log('No draft found on server');
+    }
+  } catch(error) {
+    console.log('Error loading draft from server:', error);
+  }
+}
