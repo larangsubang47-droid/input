@@ -10,11 +10,58 @@
   
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* ✅ BARU: Style untuk validasi dan sync */
+    .input-error {
+      border: 2px solid #f44336 !important;
+      background-color: #ffebee !important;
+    }
+    
+    #syncNotification {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      background: #ff9800;
+      color: white;
+      padding: 15px 20px;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      display: none;
+    }
+    
+    #validationStatus {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 2px solid #e0e0e0;
+    }
+    
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 13px;
+      border-radius: 4px;
+      border: none;
+      background: white;
+      color: #ff9800;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .btn-sm:hover {
+      background: #ffe0b2;
+    }
+  </style>
 </head>
 <body>
 
   <!-- NOTIFICATION -->
   <div id="notification" class="notification"></div>
+  
+  <!-- ✅ BARU: SYNC NOTIFICATION BAR -->
+  <div id="syncNotification"></div>
 
   <!-- LOGIN SCREEN -->
   <div id="loginScreen" class="login-container">
@@ -58,31 +105,33 @@
           </span>
         </div>
         
+        <!-- ✅ BARU: VALIDATION STATUS -->
+        <div id="validationStatus"></div>
+        
         <!-- HEADER INFO -->
         <div class="form-section">
           <h3>ℹ️ Informasi Laporan</h3>
           <div class="form-row">
             <div class="form-group">
-              <label>Hari *</label>
+              <label>Hari <span style="color:red;">*</span></label>
               <input type="text" id="hari" placeholder="Contoh: Senin" required>
             </div>
             <div class="form-group">
-              <label>Tanggal *</label>
+              <label>Tanggal <span style="color:red;">*</span></label>
               <input type="date" id="tanggal" required onchange="onDateChange()">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Operator/Petugas</label>
-              <input type="text" id="operator" placeholder="Nama petugas laboratorium">
+              <label>Operator/Petugas <span style="color:red;">*</span></label>
+              <input type="text" id="operator" placeholder="Nama petugas laboratorium" required>
             </div>
             <div class="form-group">
-              <label>Shift</label>
-              <select id="shift">
+              <label>Shift <span style="color:red;">*</span></label>
+              <select id="shift" required>
                 <option value="">-- Pilih Shift --</option>
                 <option value="Shift 1">Shift 1</option>
                 <option value="Shift 2">Shift 2</option>
-                <option value="Shift 3">Shift 3</option>
               </select>
             </div>
           </div>
@@ -90,39 +139,42 @@
 
         <!-- FREKUENSI PENGAMBILAN -->
         <div class="form-section">
-          <h3>⏰ Frekuensi Pemeriksaan</h3>
+          <h3>⏰ Frekuensi Pemeriksaan <span style="color:red;">*</span></h3>
           <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Pilih jam pemeriksaan (centang jam yang diperlukan)</p>
           <div class="time-slots">
-            <label><input type="checkbox" class="time-check" value="08:00" checked> 08:00</label>
-            <label><input type="checkbox" class="time-check" value="09:00" checked> 09:00</label>
-            <label><input type="checkbox" class="time-check" value="10:00" checked> 10:00</label>
-            <label><input type="checkbox" class="time-check" value="11:00" checked> 11:00</label>
-            <label><input type="checkbox" class="time-check" value="12:00" checked> 12:00</label>
-            <label><input type="checkbox" class="time-check" value="13:00" checked> 13:00</label>
-            <label><input type="checkbox" class="time-check" value="14:00" checked> 14:00</label>
-            <label><input type="checkbox" class="time-check" value="15:00" checked> 15:00</label>
-            <label><input type="checkbox" class="time-check" value="16:00" checked> 16:00</label>
-            <label><input type="checkbox" class="time-check" value="17:00" checked> 17:00</label>
-            <label><input type="checkbox" class="time-check" value="18:00" checked> 18:00</label>
-            <label><input type="checkbox" class="time-check" value="19:00" checked> 19:00</label>
-            <label><input type="checkbox" class="time-check" value="20:00" checked> 20:00</label>
-            <label><input type="checkbox" class="time-check" value="21:00" checked> 21:00</label>
-            <label><input type="checkbox" class="time-check" value="22:00" checked> 22:00</label>
-            <label><input type="checkbox" class="time-check" value="23:00" checked> 23:00</label>
-            <label><input type="checkbox" class="time-check" value="00:00" checked> 00:00</label>
-            <label><input type="checkbox" class="time-check" value="01:00" checked> 01:00</label>
-            <label><input type="checkbox" class="time-check" value="02:00" checked> 02:00</label>
-            <label><input type="checkbox" class="time-check" value="03:00" checked> 03:00</label>
-            <label><input type="checkbox" class="time-check" value="04:00" checked> 04:00</label>
-            <label><input type="checkbox" class="time-check" value="05:00" checked> 05:00</label>
-            <label><input type="checkbox" class="time-check" value="06:00" checked> 06:00</label>
-            <label><input type="checkbox" class="time-check" value="07:00" checked> 07:00</label>
+            <label><input type="checkbox" class="time-check" value="08:00" checked onchange="updateSelectedTimes()"> 08:00</label>
+            <label><input type="checkbox" class="time-check" value="09:00" checked onchange="updateSelectedTimes()"> 09:00</label>
+            <label><input type="checkbox" class="time-check" value="10:00" checked onchange="updateSelectedTimes()"> 10:00</label>
+            <label><input type="checkbox" class="time-check" value="11:00" checked onchange="updateSelectedTimes()"> 11:00</label>
+            <label><input type="checkbox" class="time-check" value="12:00" checked onchange="updateSelectedTimes()"> 12:00</label>
+            <label><input type="checkbox" class="time-check" value="13:00" checked onchange="updateSelectedTimes()"> 13:00</label>
+            <label><input type="checkbox" class="time-check" value="14:00" checked onchange="updateSelectedTimes()"> 14:00</label>
+            <label><input type="checkbox" class="time-check" value="15:00" checked onchange="updateSelectedTimes()"> 15:00</label>
+            <label><input type="checkbox" class="time-check" value="16:00" checked onchange="updateSelectedTimes()"> 16:00</label>
+            <label><input type="checkbox" class="time-check" value="17:00" checked onchange="updateSelectedTimes()"> 17:00</label>
+            <label><input type="checkbox" class="time-check" value="18:00" checked onchange="updateSelectedTimes()"> 18:00</label>
+            <label><input type="checkbox" class="time-check" value="19:00" checked onchange="updateSelectedTimes()"> 19:00</label>
+            <label><input type="checkbox" class="time-check" value="20:00" checked onchange="updateSelectedTimes()"> 20:00</label>
+            <label><input type="checkbox" class="time-check" value="21:00" checked onchange="updateSelectedTimes()"> 21:00</label>
+            <label><input type="checkbox" class="time-check" value="22:00" checked onchange="updateSelectedTimes()"> 22:00</label>
+            <label><input type="checkbox" class="time-check" value="23:00" checked onchange="updateSelectedTimes()"> 23:00</label>
+            <label><input type="checkbox" class="time-check" value="00:00" checked onchange="updateSelectedTimes()"> 00:00</label>
+            <label><input type="checkbox" class="time-check" value="01:00" checked onchange="updateSelectedTimes()"> 01:00</label>
+            <label><input type="checkbox" class="time-check" value="02:00" checked onchange="updateSelectedTimes()"> 02:00</label>
+            <label><input type="checkbox" class="time-check" value="03:00" checked onchange="updateSelectedTimes()"> 03:00</label>
+            <label><input type="checkbox" class="time-check" value="04:00" checked onchange="updateSelectedTimes()"> 04:00</label>
+            <label><input type="checkbox" class="time-check" value="05:00" checked onchange="updateSelectedTimes()"> 05:00</label>
+            <label><input type="checkbox" class="time-check" value="06:00" checked onchange="updateSelectedTimes()"> 06:00</label>
+            <label><input type="checkbox" class="time-check" value="07:00" checked onchange="updateSelectedTimes()"> 07:00</label>
           </div>
         </div>
 
         <!-- DATA KUALITAS AIR -->
         <div class="form-section">
-          <h3>🔬 Data Pemeriksaan Kualitas Air</h3>
+          <h3>🔬 Data Pemeriksaan Kualitas Air <span style="color:red;">*</span></h3>
+          <p style="font-size: 13px; color: #f44336; margin-bottom: 12px;">
+            <strong>⚠️ Semua field wajib diisi!</strong> Field yang kosong akan ditandai dengan warna merah.
+          </p>
           <div class="data-table" id="kualitasAirTable"></div>
         </div>
 
@@ -130,7 +182,7 @@
         <div class="form-section">
           <h3>📝 Catatan Tambahan</h3>
           <div class="form-group">
-            <label>Catatan</label>
+            <label>Catatan (opsional)</label>
             <textarea id="catatan" rows="3" placeholder="Catatan atau keterangan tambahan..."></textarea>
           </div>
         </div>
@@ -157,9 +209,10 @@
         <div style="margin-top: 15px; padding: 12px; background: #e0f2f1; border-radius: 8px; font-size: 13px;">
           <strong>💡 Tips:</strong>
           <ul style="margin: 8px 0 0 20px; line-height: 1.6;">
-            <li><strong>Simpan Draft</strong>: Menyimpan data di browser (bisa dilanjutkan kapan saja)</li>
-            <li><strong>Kirim ke Google Drive</strong>: Mengirim laporan final ke server (draft akan dihapus)</li>
-            <li>Draft otomatis tersimpan setiap 30 detik</li>
+            <li><strong>Simpan Draft</strong>: Menyimpan data di browser & server (bisa dilanjutkan kapan saja)</li>
+            <li><strong>Kirim ke Google Drive</strong>: Mengirim laporan final (semua field harus terisi)</li>
+            <li>✅ Draft otomatis tersimpan setiap 30 detik</li>
+            <li>🔄 Sistem akan memberitahu jika ada user lain yang mengubah data</li>
           </ul>
         </div>
       </div>
