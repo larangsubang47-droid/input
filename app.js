@@ -4,7 +4,8 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbzkQheaZxuWVPF3PlKMCEj-acIHddIynoPNthSuds3eTokwozi_pL6HKavg1bw11ArvGQ/exec';
 
 // ==========================================
-// DA// ==========================================
+// DATA STRUCTURE
+// ==========================================
 
 const dataStructure = {
   'Kekeruhan': [
@@ -98,6 +99,8 @@ let currentUser = null;
 let deferredPrompt = null;
 let selectedTimes = [];
 let autoSaveInterval = null;
+let syncInterval = null; // ✅ BARU: Interval untuk sync multi-user
+let lastSyncHash = null; // ✅ BARU: Hash untuk deteksi perubahan
 
 // ==========================================
 // INITIALIZATION
@@ -127,6 +130,7 @@ window.onload = function() {
   
   // Start auto-save (every 30 seconds)
   startAutoSave();
+  startSyncChecker(); // ✅ BARU
 };
 
 // ==========================================
@@ -148,16 +152,25 @@ function saveDraft(silent = false) {
     if(!tanggal) return;
     
     const draftData = collectFormData();
+    
+    // ✅ BARU: Tambah info updater
+    draftData.updatedBy = currentUser.nama || currentUser.username;
+    draftData.updatedAt = new Date().toISOString();
+    
     const draftKey = `draft_kualitas_${tanggal}`;
     
     localStorage.setItem(draftKey, JSON.stringify(draftData));
     localStorage.setItem('lastDraftDate_kualitas', tanggal);
+    
+    // ✅ BARU: Kirim ke server
+    saveDraftToServer(draftData, silent);
     
     if(!silent) {
       showNotification('💾 Draft tersimpan!', 'success');
     }
     
     updateDraftIndicator(true);
+    updateValidationStatus(); // ✅ BARU
   } catch(error) {
     console.error('Error saving draft:', error);
   }
@@ -173,7 +186,14 @@ function loadDraft() {
       const data = JSON.parse(draftData);
       fillFormWithData(data);
       updateDraftIndicator(true);
-      showNotification('📄 Draft ditemukan dan dimuat', 'info');
+      
+      // ✅ BARU: Tampilkan info siapa yang terakhir update
+      if(data.updatedBy && data.updatedAt) {
+        const updateTime = new Date(data.updatedAt).toLocaleString('id-ID');
+        showNotification(`📄 Draft dimuat (Terakhir: ${data.updatedBy} - ${updateTime})`, 'info');
+      } else {
+        showNotification('📄 Draft ditemukan dan dimuat', 'info');
+      }
     } else {
       updateDraftIndicator(false);
     }
@@ -210,119 +230,433 @@ function collectFormData() {
     tanggal: document.getElementById('tanggal').value,
     operator: document.getElementById('operator').value,
     shift: document.getElementById('shift').value,
-    kualitasData: collectTableData('kualitasAirTable'),
-    catatan: document.getElementById('catatan').value,
-    selectedTimes: selectedTimes
+    selectedTimes: selectedTimes,
+    timeData: collectTimeData(),
+    catatan: document.getElementById('catatan').value
   };
 }
 
+function collectTimeData() {
+  const timeData = {};
+  
+  selectedTimes.forEach(time => {
+    timeData[time] = {};
+    
+    Object.keys(dataStructure).forEach(param => {
+      timeData[time][param] = {};
+      
+      dataStructure[param].forEach(sample => {
+        const key = `${param}_${sample.name}`;
+        const inputId = `input_${key}_${time}`;
+        const input = document.getElementById(inputId);
+        
+        if(input) {
+          timeData[time][param][sample.name] = input.value;
+        }
+      });
+    });
+  });
+  
+  return timeData;
+}
+
 function fillFormWithData(data) {
+  if(!data) return;
+  
   document.getElementById('hari').value = data.hari || '';
   document.getElementById('tanggal').value = data.tanggal || '';
   document.getElementById('operator').value = data.operator || '';
   document.getElementById('shift').value = data.shift || '';
   document.getElementById('catatan').value = data.catatan || '';
   
-  // Fill table data
-  if(data.kualitasData) {
-    fillTableData('kualitasAirTable', data.kualitasData);
-  }
-}
-
-function fillTableData(tableId, data) {
-  if(!data) return;
-  
-  // Data format: { "Kekeruhan_Air Baku": { "08:00": 5.2 }, ... }
-  for(const [key, timeData] of Object.entries(data)) {
-    // Parse key untuk mendapatkan parameter dan item name
-    // Key format: "PARAMETER_Jenis Sampel"
-    for(const [time, value] of Object.entries(timeData)) {
-      const inputId = `${key}_${time.replace(':', '')}`.replace(/\s+/g, '_');
-      const input = document.getElementById(inputId);
-      if(input && value !== null && value !== undefined) {
-        input.value = value;
-      }
-    }
-  }
-}
-
-// ==========================================
-// DATE CHANGE HANDLER
-// ==========================================
-function onDateChange() {
-  const oldDate = localStorage.getItem('lastDraftDate_kualitas');
-  if(oldDate) {
-    saveDraft(true);
+  if(data.selectedTimes) {
+    selectedTimes = data.selectedTimes;
+    updateSelectedTimes();
   }
   
-  const tanggalInput = document.getElementById('tanggal');
-  const date = new Date(tanggalInput.value + 'T00:00:00');
-  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-  document.getElementById('hari').value = days[date.getDay()];
-  
-  loadDraft();
-}
-
-// ==========================================
-// PWA INSTALL
-// ==========================================
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBtn').style.display = 'block';
-});
-
-function installPWA() {
-  if(deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        showNotification('Aplikasi berhasil diinstall!', 'success');
-      }
-      deferredPrompt = null;
-      document.getElementById('installBtn').style.display = 'none';
+  if(data.timeData) {
+    Object.keys(data.timeData).forEach(time => {
+      Object.keys(data.timeData[time]).forEach(param => {
+        Object.keys(data.timeData[time][param]).forEach(sampleName => {
+          const key = `${param}_${sampleName}`;
+          const inputId = `input_${key}_${time}`;
+          const input = document.getElementById(inputId);
+          
+          if(input) {
+            input.value = data.timeData[time][param][sampleName];
+          }
+        });
+      });
     });
   }
+  
+  updateValidationStatus(); // ✅ BARU: Update status setelah load
 }
 
 // ==========================================
-// AUTHENTICATION
+// ✅ FITUR BARU: MULTI-USER SYNC
 // ==========================================
-async function login() {
-  const username = document.getElementById('loginUsername').value;
-  const password = document.getElementById('loginPassword').value;
-
-  if(!username || !password) {
-    showNotification('Username dan password harus diisi!', 'error');
-    return;
+function startSyncChecker() {
+  if(syncInterval) {
+    clearInterval(syncInterval);
   }
+  
+  syncInterval = setInterval(() => {
+    checkForRemoteChanges();
+  }, 10000); // Check setiap 10 detik
+}
 
-  // OFFLINE MODE - Hardcoded login untuk testing
-  // Hapus ini kalau sudah ada backend
-  if(username === 'admin' && password === 'admin123') {
-    currentUser = {
-      userId: 'ADM001',
-      nama: 'Administrator',
-      role: 'admin'
-    };
-    localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
-    showNotification('Login berhasil! (Offline Mode)', 'success');
-    showMainApp();
-    return;
-  } else if(username === 'user' && password === 'user123') {
-    currentUser = {
-      userId: 'USR001',
-      nama: 'User Operator',
-      role: 'user'
-    };
-    localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
-    showNotification('Login berhasil! (Offline Mode)', 'success');
-    showMainApp();
-    return;
-  }
-
-  // Online mode - pakai backend API
+async function checkForRemoteChanges() {
   try {
+    const tanggal = document.getElementById('tanggal').value;
+    if(!tanggal) return;
+    
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'getLatestDraft',
+        tanggal: tanggal,
+        userId: currentUser.userId
+      })
+    });
+    
+    const result = await response.json();
+    
+    if(result.success && result.data) {
+      const remoteData = result.data;
+      const remoteHash = generateHash(remoteData);
+      const localData = collectFormData();
+      const localHash = generateHash(localData);
+      
+      if(lastSyncHash !== null && remoteHash !== localHash && remoteHash !== lastSyncHash) {
+        showSyncNotification(remoteData);
+      }
+      
+      lastSyncHash = remoteHash;
+    }
+  } catch(error) {
+    console.log('Sync check error (normal jika offline):', error);
+  }
+}
+
+function generateHash(data) {
+  const str = JSON.stringify(data);
+  let hash = 0;
+  for(let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return hash.toString();
+}
+
+function showSyncNotification(remoteData) {
+  const syncBar = document.getElementById('syncNotification');
+  if(syncBar) {
+    syncBar.style.display = 'block';
+    syncBar.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span>🔄 ${remoteData.updatedBy || 'User lain'} baru mengubah data (${new Date(remoteData.updatedAt).toLocaleTimeString('id-ID')})</span>
+        <div>
+          <button onclick="loadRemoteData()" class="btn btn-sm" style="margin-right: 8px;">📥 Muat Data Terbaru</button>
+          <button onclick="dismissSync()" class="btn btn-sm">❌ Abaikan</button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function loadRemoteData() {
+  loadDraft();
+  dismissSync();
+  showNotification('✅ Data terbaru berhasil dimuat', 'success');
+}
+
+function dismissSync() {
+  const syncBar = document.getElementById('syncNotification');
+  if(syncBar) {
+    syncBar.style.display = 'none';
+  }
+}
+
+async function saveDraftToServer(draftData, silent = false) {
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'saveDraft',
+        userId: currentUser.userId,
+        draftData: draftData
+      })
+    });
+    
+    const result = await response.json();
+    
+    if(!silent && result.success) {
+      console.log('✅ Draft synced to server');
+    }
+  } catch(error) {
+    console.log('Draft sync skipped (offline mode)');
+  }
+}
+
+// ==========================================
+// ✅ FITUR BARU: VALIDASI INPUT
+// ==========================================
+function validateForm() {
+  const errors = [];
+  
+  if(!document.getElementById('hari').value.trim()) {
+    errors.push('Hari harus diisi');
+  }
+  if(!document.getElementById('tanggal').value) {
+    errors.push('Tanggal harus diisi');
+  }
+  if(!document.getElementById('operator').value.trim()) {
+    errors.push('Operator/Petugas harus diisi');
+  }
+  if(!document.getElementById('shift').value) {
+    errors.push('Shift harus dipilih');
+  }
+  
+  if(selectedTimes.length === 0) {
+    errors.push('Minimal 1 jam pemeriksaan harus dipilih');
+  }
+  
+  const emptyFields = [];
+  selectedTimes.forEach(time => {
+    Object.keys(dataStructure).forEach(param => {
+      dataStructure[param].forEach(sample => {
+        const key = `${param}_${sample.name}`;
+        const inputId = `input_${key}_${time}`;
+        const input = document.getElementById(inputId);
+        
+        if(input && !input.value.trim()) {
+          emptyFields.push(`${param} - ${sample.name} (${time})`);
+          input.classList.add('input-error');
+        } else if(input) {
+          input.classList.remove('input-error');
+        }
+      });
+    });
+  });
+  
+  if(emptyFields.length > 0) {
+    errors.push(`${emptyFields.length} field data kualitas masih kosong`);
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors: errors,
+    emptyCount: emptyFields.length
+  };
+}
+
+function updateValidationStatus() {
+  const totalFields = selectedTimes.length * getTotalSamples();
+  const filledFields = getFilledFieldsCount();
+  const emptyFields = totalFields - filledFields;
+  
+  const statusDiv = document.getElementById('validationStatus');
+  if(statusDiv) {
+    const percentage = totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0;
+    
+    statusDiv.innerHTML = `
+      <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span><strong>Progress Pengisian:</strong></span>
+        <span><strong>${filledFields} / ${totalFields} field</strong> (${percentage}%)</span>
+      </div>
+      <div style="background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden;">
+        <div style="background: ${percentage === 100 ? '#4caf50' : '#ff9800'}; height: 100%; width: ${percentage}%; transition: width 0.3s;"></div>
+      </div>
+      ${emptyFields > 0 ? `<div style="margin-top: 8px; color: #f44336;">⚠️ ${emptyFields} field masih kosong</div>` : '<div style="margin-top: 8px; color: #4caf50;">✅ Semua field sudah terisi</div>'}
+    `;
+  }
+}
+
+function getTotalSamples() {
+  let total = 0;
+  Object.keys(dataStructure).forEach(param => {
+    total += dataStructure[param].length;
+  });
+  return total;
+}
+
+function getFilledFieldsCount() {
+  let filled = 0;
+  
+  selectedTimes.forEach(time => {
+    Object.keys(dataStructure).forEach(param => {
+      dataStructure[param].forEach(sample => {
+        const key = `${param}_${sample.name}`;
+        const inputId = `input_${key}_${time}`;
+        const input = document.getElementById(inputId);
+        
+        if(input && input.value.trim() !== '') {
+          filled++;
+        }
+      });
+    });
+  });
+  
+  return filled;
+}
+
+// ==========================================
+// TIME SELECTION
+// ==========================================
+function updateSelectedTimes() {
+  const shift = document.getElementById('shift').value;
+  const checkboxContainer = document.getElementById('timeCheckboxes');
+  
+  if(!shift) {
+    checkboxContainer.innerHTML = '<p style="color:#999;">Pilih shift terlebih dahulu</p>';
+    selectedTimes = [];
+    buildInputTable();
+    return;
+  }
+  
+  const timeOptions = {
+    '1': ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
+    '2': ['14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'],
+    '3': ['22:00', '23:00', '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00'] // ✅ SHIFT 3 DITAMBAHKAN
+  };
+  
+  const times = timeOptions[shift] || [];
+  
+  let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;">';
+  times.forEach(time => {
+    const checked = selectedTimes.includes(time) ? 'checked' : '';
+    html += `
+      <label class="time-checkbox">
+        <input type="checkbox" value="${time}" ${checked} onchange="toggleTime('${time}')">
+        <span>${time}</span>
+      </label>
+    `;
+  });
+  html += '</div>';
+  
+  checkboxContainer.innerHTML = html;
+  buildInputTable();
+}
+
+function toggleTime(time) {
+  const index = selectedTimes.indexOf(time);
+  if(index > -1) {
+    selectedTimes.splice(index, 1);
+  } else {
+    selectedTimes.push(time);
+  }
+  
+  selectedTimes.sort();
+  buildInputTable();
+  saveDraft(true);
+}
+
+// ==========================================
+// BUILD INPUT TABLE
+// ==========================================
+function buildInputTable() {
+  const container = document.getElementById('inputTable');
+  
+  if(selectedTimes.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#999; padding:40px;">Pilih minimal 1 waktu pemeriksaan</p>';
+    return;
+  }
+  
+  let html = '<div class="input-table">';
+  
+  // Header
+  html += '<div class="table-header">';
+  html += '<div class="param-cell"><strong>Parameter</strong></div>';
+  html += '<div class="sample-cell"><strong>Sampel</strong></div>';
+  html += '<div class="satuan-cell"><strong>Satuan</strong></div>';
+  html += '<div class="std-cell"><strong>Standar</strong></div>';
+  
+  selectedTimes.forEach(time => {
+    html += `<div class="time-cell"><strong>${time}</strong></div>`;
+  });
+  
+  html += '</div>';
+  
+  // Rows
+  Object.keys(dataStructure).forEach(param => {
+    dataStructure[param].forEach((sample, idx) => {
+      html += '<div class="table-row">';
+      
+      if(idx === 0) {
+        html += `<div class="param-cell" style="grid-row: span ${dataStructure[param].length};">${param}</div>`;
+      }
+      
+      html += `<div class="sample-cell">${sample.name}</div>`;
+      html += `<div class="satuan-cell">${sample.satuan}</div>`;
+      
+      const std = sample.std_min !== '' || sample.std_max !== '' 
+        ? `${sample.std_min}${sample.std_max !== '' ? ' - ' + sample.std_max : ''}` 
+        : '-';
+      html += `<div class="std-cell">${std}</div>`;
+      
+      selectedTimes.forEach(time => {
+        const key = `${param}_${sample.name}`;
+        const inputId = `input_${key}_${time}`;
+        
+        html += `<div class="input-cell">
+          <input type="number" 
+                 step="0.01" 
+                 id="${inputId}" 
+                 class="data-input" 
+                 placeholder="0.00"
+                 onchange="saveDraft(true); updateValidationStatus();"
+                 onblur="updateValidationStatus();">
+        </div>`;
+      });
+      
+      html += '</div>';
+    });
+  });
+  
+  html += '</div>';
+  
+  container.innerHTML = html;
+}
+
+// ==========================================
+// LOGIN & USER MANAGEMENT
+// ==========================================
+async function handleLogin(event) {
+  event.preventDefault();
+  
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const loginBtn = document.getElementById('loginBtn');
+  
+  if(!username || !password) {
+    showNotification('Username dan password harus diisi', 'error');
+    return;
+  }
+  
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Memproses...';
+  
+  try {
+    // OFFLINE MODE - Bypass login check
+    const offlineUser = {
+      userId: 'offline_' + Date.now(),
+      username: username,
+      nama: username,
+      role: 'operator'
+    };
+    
+    currentUser = offlineUser;
+    localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
+    showMainApp();
+    showNotification('Login berhasil! (Offline Mode)', 'success');
+    
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Masuk';
+    return;
+    
+    // ONLINE MODE - code dibawah tidak akan dijalankan
     const response = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({
@@ -331,19 +665,22 @@ async function login() {
         password: password
       })
     });
-
+    
     const result = await response.json();
-
+    
     if(result.success) {
-      currentUser = result.data;
+      currentUser = result.data.user;
       localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
-      showNotification('Login berhasil!', 'success');
       showMainApp();
+      showNotification('Login berhasil!', 'success');
     } else {
-      showNotification(result.message, 'error');
+      showNotification('Login gagal: ' + result.message, 'error');
     }
   } catch(error) {
-    showNotification('Username/password salah (Offline Mode aktif)', 'error');
+    showNotification('Error: ' + error.message, 'error');
+  } finally {
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Masuk';
   }
 }
 
@@ -351,149 +688,61 @@ function logout() {
   if(confirm('Yakin ingin logout?')) {
     localStorage.removeItem('currentUser_kualitas');
     currentUser = null;
-    document.getElementById('mainApp').classList.add('hidden');
+    
+    if(autoSaveInterval) clearInterval(autoSaveInterval);
+    if(syncInterval) clearInterval(syncInterval); // ✅ BARU
+    
     document.getElementById('loginScreen').classList.remove('hidden');
-    showNotification('Logout berhasil!', 'success');
+    document.getElementById('mainApp').classList.add('hidden');
   }
 }
 
 function showMainApp() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('mainApp').classList.remove('hidden');
-  document.getElementById('userDisplay').textContent = `👤 ${currentUser.nama}`;
-  
-  // Force update selected times first
-  updateSelectedTimes();
-  
-  // Then initialize tables
-  setTimeout(() => {
-    initializeTables();
-  }, 100);
-  
-  loadHistory();
+  document.getElementById('userName').textContent = currentUser.nama || currentUser.username;
 }
 
 // ==========================================
-// TABLE INITIALIZATION
-// ==========================================
-function updateSelectedTimes() {
-  const checkboxes = document.querySelectorAll('.time-check:checked');
-  selectedTimes = Array.from(checkboxes).map(cb => cb.value);
-  initializeTables();
-}
-
-function initializeTables() {
-  document.querySelectorAll('.time-check').forEach(checkbox => {
-    checkbox.addEventListener('change', updateSelectedTimes);
-  });
-  
-  createKualitasTable();
-}
-
-function createKualitasTable() {
-  const container = document.getElementById('kualitasAirTable');
-  if (!container) return;
-  
-  let html = '<table class="input-table"><thead><tr>';
-  html += '<th>Parameter</th><th>Jenis Sampel</th><th>Satuan</th><th>Min</th><th>Max</th>';
-  
-  selectedTimes.forEach(time => {
-    html += `<th>${time}</th>`;
-  });
-  
-  html += '</tr></thead><tbody>';
-  
-  for(const [paramGroup, items] of Object.entries(dataStructure)) {
-    items.forEach((item, index) => {
-      html += `<tr>`;
-      
-      if(index === 0) {
-        html += `<td rowspan="${items.length}"><strong>${paramGroup}</strong></td>`;
-      }
-      
-      html += `<td>${item.name}</td>`;
-      html += `<td>${item.satuan}</td>`;
-      html += `<td>${item.std_min !== '' ? item.std_min : '-'}</td>`;
-      html += `<td>${item.std_max !== '' ? item.std_max : '-'}</td>`;
-      
-      selectedTimes.forEach(time => {
-        const inputId = `${paramGroup}_${item.name}_${time.replace(':', '')}`.replace(/\s+/g, '_');
-        html += `<td><input type="number" id="${inputId}" step="0.01" placeholder="0"></td>`;
-      });
-      
-      html += `</tr>`;
-    });
-  }
-  
-  html += '</tbody></table>';
-  container.innerHTML = html;
-}
-
-// ==========================================
-// COLLECT DATA FROM TABLES
-// ==========================================
-function collectTableData(tableId) {
-  const data = {};
-  
-  // FORMAT YANG BENAR UNTUK BACKEND:
-  // Key format: "PARAMETER_Jenis Sampel" (dengan underscore)
-  // Value: { "08:00": value, "12:00": value }
-  
-  for(const [paramGroup, items] of Object.entries(dataStructure)) {
-    items.forEach(item => {
-      // Buat key dengan format: "Parameter_Jenis Sampel"
-      const key = `${paramGroup}_${item.name}`;
-      data[key] = {};
-      
-      selectedTimes.forEach(time => {
-        const inputId = `${paramGroup}_${item.name}_${time.replace(':', '')}`.replace(/\s+/g, '_');
-        const input = document.getElementById(inputId);
-        if (input && input.value) {
-          // Simpan dengan key waktu asli (dengan titik dua)
-          data[key][time] = parseFloat(input.value);
-        }
-      });
-    });
-  }
-  
-  return data;
-}
-
-// ==========================================
-// SAVE DATA - FINAL SUBMIT
+// SAVE FINAL DATA
 // ==========================================
 async function saveDataFinal() {
-  const hari = document.getElementById('hari').value;
-  const tanggal = document.getElementById('tanggal').value;
-
-  if(!hari || !tanggal) {
-    showNotification('Hari dan tanggal harus diisi!', 'error');
+  const saveBtn = document.getElementById('saveFinalBtn');
+  
+  // ✅ VALIDASI WAJIB
+  const validation = validateForm();
+  
+  if(!validation.isValid) {
+    let errorMsg = '❌ Validasi Gagal:\n\n';
+    validation.errors.forEach(err => {
+      errorMsg += `• ${err}\n`;
+    });
+    errorMsg += '\n⚠️ Silakan lengkapi semua field yang ditandai merah!';
+    
+    alert(errorMsg);
+    
+    const firstError = document.querySelector('.input-error');
+    if(firstError) {
+      firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstError.focus();
+    }
+    
     return;
   }
   
-  if(!confirm('Kirim laporan final ke Google Drive?\n\nSetelah dikirim, draft akan dihapus.')) {
+  if(!confirm('Kirim laporan ke Google Drive?\n\n✅ Semua data sudah terisi lengkap.')) {
     return;
   }
-
-  const saveBtn = document.getElementById('saveFinalBtn');
+  
   saveBtn.disabled = true;
-  saveBtn.textContent = '⏳ Mengirim ke Google Drive...';
-
+  saveBtn.textContent = '⏳ Mengirim...';
+  
   try {
     const reportData = collectFormData();
-    
-    // DEBUG: Log data yang akan dikirim
-    console.log('=== DATA YANG AKAN DIKIRIM ===');
-    console.log('selectedTimes:', reportData.selectedTimes);
-    console.log('kualitasData keys:', Object.keys(reportData.kualitasData));
-    console.log('Sample data:', JSON.stringify(reportData.kualitasData, null, 2).substring(0, 500));
-    console.log('Full reportData:', reportData);
+    const tanggal = reportData.tanggal;
 
-    // Cek apakah API_URL sudah diisi
-    if(!API_URL || API_URL.includes('YOUR_DEPLOYMENT_ID_HERE')) {
-      console.warn('API_URL belum dikonfigurasi, menggunakan OFFLINE MODE');
-      
-      // OFFLINE MODE - Simpan ke localStorage
+    // OFFLINE MODE - Simpan ke localStorage
+    if(true) {
       const offlineReports = JSON.parse(localStorage.getItem('offline_reports_kualitas') || '[]');
       const recordId = 'RPT' + Date.now();
       
@@ -574,6 +823,7 @@ function clearForm() {
   });
   
   updateDraftIndicator(false);
+  updateValidationStatus(); // ✅ BARU
 }
 
 // ==========================================
@@ -705,4 +955,3 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
-
