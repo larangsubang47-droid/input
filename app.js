@@ -1,7 +1,7 @@
 // ==========================================
 // API CONFIGURATION
 // ==========================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbyx-Xyow3FjhSUVy1_SDPy9sfFrVMsnjY4FptJ5wzxeLxKyJnvZqpjJ3xcVLNGDFCJ0qA/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzKRvkf4OKGcb7kCx_1TLgHBy1KAcVfDoDnYEnOFNdxRNccNfWKqzpUCfEzofubOrxhNw/exec';
 const dataStructure = {
   Kekeruhan: [
     { name: 'Air Baku', satuan: 'NTU' },
@@ -606,4 +606,5 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
+
 
