@@ -968,21 +968,125 @@ function switchScreen(screen) {
     loadHistory();
   }
 }
+
 // ==========================================
-// RENDER TABLE FUNCTIONS
+// NOTIFICATION
+// ==========================================
+function showNotification(message, type = 'success') {
+  const notification = document.getElementById('notification');
+  notification.textContent = message;
+  notification.className = `notification ${type} show`;
+  
+  setTimeout(() => {
+    notification.classList.remove('show');
+  }, 3000);
+}
+
+if ('Notification' in window && Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+
+// PASTE CODE INI DI BAGIAN PALING ATAS FILE app.js
+// TEPAT SETELAH BARIS: let lastSyncHash = null;
+
+// ==========================================
+// FIXED INITIALIZATION
+// ==========================================
+window.onload = function() {
+  console.log('🚀 App initializing...');
+  
+  const savedUser = localStorage.getItem('currentUser_kualitas');
+  if(savedUser) {
+    currentUser = JSON.parse(savedUser);
+    console.log('✅ User found:', currentUser.username);
+    showMainApp();
+  } else {
+    console.log('❌ No user - showing login screen');
+    return; // Stop here if not logged in
+  }
+  
+  // Wait for DOM to be fully ready
+  setTimeout(() => {
+    console.log('⏰ Initializing form...');
+    
+    // Set default date to today
+    const today = new Date();
+    const tanggalInput = document.getElementById('tanggal');
+    const hariInput = document.getElementById('hari');
+    
+    if(tanggalInput) {
+      tanggalInput.valueAsDate = today;
+      console.log('📅 Date set:', tanggalInput.value);
+    }
+    
+    // Set hari
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    if(hariInput) {
+      hariInput.value = days[today.getDay()];
+      console.log('📆 Day set:', hariInput.value);
+    }
+    
+    // Initialize selected times from checked checkboxes
+    updateSelectedTimes();
+    console.log('✅ Selected times:', selectedTimes);
+    
+    // Load draft if exists
+    setTimeout(() => {
+      loadDraft();
+    }, 100);
+    
+  }, 500); // Longer delay to ensure DOM is ready
+  
+  // Start auto-save (every 30 seconds)
+  startAutoSave();
+  startSyncChecker();
+};
+
+// ==========================================
+// FIXED UPDATE SELECTED TIMES
+// ==========================================
+function updateSelectedTimes() {
+  selectedTimes = [];
+  
+  const checkboxes = document.querySelectorAll('.time-check');
+  console.log('🔍 Found checkboxes:', checkboxes.length);
+  
+  checkboxes.forEach(checkbox => {
+    if(checkbox.checked) {
+      selectedTimes.push(checkbox.value);
+      console.log('✓ Checked:', checkbox.value);
+    }
+  });
+  
+  selectedTimes.sort();
+  
+  console.log('📊 Total selected times:', selectedTimes.length);
+  console.log('🕐 Times:', selectedTimes);
+  
+  // Render table
+  renderKualitasAirTable();
+}
+
+// ==========================================
+// FIXED RENDER TABLE
 // ==========================================
 function renderKualitasAirTable() {
+  console.log('🎨 Rendering table...');
+  
   const container = document.getElementById('kualitasAirTable');
   
   if(!container) {
-    console.error('Container kualitasAirTable tidak ditemukan!');
+    console.error('❌ Container #kualitasAirTable not found!');
     return;
   }
   
   if(selectedTimes.length === 0) {
-    container.innerHTML = '<p style="text-align:center; color:#999; padding:40px;">Pilih minimal 1 waktu pemeriksaan</p>';
+    console.warn('⚠️ No times selected');
+    container.innerHTML = '<p style="text-align:center; color:#999; padding:40px;">Pilih minimal 1 waktu pemeriksaan (centang checkbox jam di atas)</p>';
     return;
   }
+  
+  console.log('✅ Rendering table with', selectedTimes.length, 'time columns');
   
   let html = '<div class="input-table">';
   
@@ -1038,23 +1142,17 @@ function renderKualitasAirTable() {
   html += '</div>';
   
   container.innerHTML = html;
-  updateValidationStatus();
+  console.log('✅ Table rendered successfully!');
+  
+  // Update validation after rendering
+  setTimeout(() => {
+    updateValidationStatus();
+  }, 100);
 }
 
-function updateSelectedTimes() {
-  selectedTimes = [];
-  
-  document.querySelectorAll('.time-check:checked').forEach(checkbox => {
-    selectedTimes.push(checkbox.value);
-  });
-  
-  selectedTimes.sort();
-  
-  console.log('Selected times:', selectedTimes);
-  
-  renderKualitasAirTable();
-}
-
+// ==========================================
+// FIXED ON DATE CHANGE
+// ==========================================
 function onDateChange() {
   const tanggal = document.getElementById('tanggal').value;
   if(tanggal) {
@@ -1062,6 +1160,7 @@ function onDateChange() {
     const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     document.getElementById('hari').value = days[date.getDay()];
     
+    // Load draft for this date
     setTimeout(() => {
       loadDraft();
     }, 100);
@@ -1069,18 +1168,13 @@ function onDateChange() {
 }
 
 // ==========================================
-// VALIDATION STATUS
+// FIXED VALIDATION
 // ==========================================
 function updateValidationStatus() {
   const statusDiv = document.getElementById('validationStatus');
   if(!statusDiv) return;
   
-  const requiredFields = [
-    'hari',
-    'tanggal', 
-    'operator',
-    'shift'
-  ];
+  const requiredFields = ['hari', 'tanggal', 'operator', 'shift'];
   
   let missingFields = [];
   let emptyDataInputs = 0;
@@ -1132,6 +1226,10 @@ function updateValidationStatus() {
     saveFinalBtn.disabled = !allValid;
   }
 }
+
+console.log('✅ Fixed functions loaded!');
+
+
 // ==========================================
 // AUTHENTICATION FUNCTIONS
 // ==========================================
@@ -1250,21 +1348,11 @@ function installPWA() {
     });
   }
 }
-}
 
-// ==========================================
-// NOTIFICATION
-// ==========================================
-function showNotification(message, type = 'success') {
-  const notification = document.getElementById('notification');
-  notification.textContent = message;
-  notification.className = `notification ${type} show`;
-  
-  setTimeout(() => {
-    notification.classList.remove('show');
-  }, 3000);
-}
+
 
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
+
+console.log('✅ App.js loaded completely!');
