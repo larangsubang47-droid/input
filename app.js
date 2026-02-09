@@ -473,87 +473,21 @@ async function saveDataFinal() {
 
   try {
     const reportData = collectFormData();
-    
-    // Prepare individual records to send
-    const records = [];
-    
-    // Loop through all parameters
-    Object.keys(dataStructure).forEach(paramName => {
-      const paramData = reportData[paramName];
-      
-      if(!paramData) return;
-      
-      // Loop through each sample type
-      Object.keys(paramData).forEach(jenisSampel => {
-        const timeData = paramData[jenisSampel];
-        
-        if(!timeData) return;
-        
-        // Loop through each time
-        Object.keys(timeData).forEach(waktu => {
-          const nilai = timeData[waktu];
-          
-          if(nilai !== null && nilai !== undefined && nilai !== '') {
-            records.push({
-              tanggal: tanggal,
-              waktu: waktu,
-              parameter: paramName,
-              jenisSampel: jenisSampel,
-              nilai: nilai,
-              catatan: `${hari} | Shift: ${shift} | Operator: ${operator}`
-            });
-          }
-        });
-      });
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'saveQualityReport',
+        userId: currentUser.userId,
+        reportData: reportData
+      })
     });
 
-    if(records.length === 0) {
-      showNotification('Tidak ada data yang diinput!', 'error');
-      saveBtn.disabled = false;
-      saveBtn.textContent = '📤 Kirim ke Google Drive';
-      return;
-    }
+    const result = await response.json();
 
-    // Send all records to backend
-    let successCount = 0;
-    let failCount = 0;
-    
-    showNotification(`Mengirim ${records.length} data ke server...`, 'info');
-
-    for(let i = 0; i < records.length; i++) {
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify({
-            action: 'saveQualityData',
-            userId: currentUser.userId,
-            ...records[i]
-          })
-        });
-
-        const result = await response.json();
-
-        if(result.success) {
-          successCount++;
-        } else {
-          failCount++;
-          console.error('Failed record:', records[i], result.message);
-        }
-        
-        // Update progress
-        saveBtn.textContent = `⏳ ${successCount + failCount}/${records.length} data...`;
-        
-      } catch(error) {
-        failCount++;
-        console.error('Error sending record:', records[i], error);
-      }
-    }
-
-    // Show final result
-    if(successCount > 0) {
-      showNotification(`✓ ${successCount} data berhasil dikirim!${failCount > 0 ? ` (${failCount} gagal)` : ''}`, 'success');
+    if(result.success) {
+      showNotification('✓ Laporan berhasil dikirim ke Google Drive!', 'success');
       
-      // Delete draft
       const draftKey = `draft_kualitas_${tanggal}`;
       localStorage.removeItem(draftKey);
       updateDraftIndicator(false);
@@ -561,18 +495,15 @@ async function saveDataFinal() {
       clearForm();
       loadHistory();
     } else {
-      showNotification('Gagal mengirim data! Cek koneksi internet.', 'error');
+      showNotification('Gagal kirim: ' + result.message, 'error');
     }
-    
   } catch(error) {
     showNotification('Error: ' + error.message, 'error');
-    console.error('Save error:', error);
   } finally {
     saveBtn.disabled = false;
     saveBtn.textContent = '📤 Kirim ke Google Drive';
   }
 }
-
 
 function clearForm() {
   const today = new Date();
@@ -622,18 +553,15 @@ async function loadHistory() {
       let html = '';
       records.forEach(record => {
         const date = new Date(record.createdAt).toLocaleString('id-ID');
-        const statusClass = record.statusKualitas === 'OK' ? 'status-aktif' : 'status-warning';
-        const statusIcon = record.statusKualitas === 'OK' ? '✓' : '⚠️';
         
         html += `
           <div class="history-item" onclick="viewDetail('${record.recordId}')">
             <div class="history-header">
               <span class="history-date">${date}</span>
-              <span class="status-badge ${statusClass}">${statusIcon} ${record.parameter}</span>
+              <span class="status-badge status-aktif">📄 Laporan</span>
             </div>
-            <div class="history-name"><strong>${record.jenisSampel}:</strong> ${record.nilai} ${record.unit || ''}</div>
-            <div class="history-id">${record.tanggal} ${record.waktu} | ${record.createdBy}</div>
-            ${record.statusKualitas !== 'OK' ? '<div style="color:#f44336; font-size:12px; margin-top:5px; font-weight:bold;">' + statusIcon + ' ' + record.statusKualitas + '</div>' : ''}
+            <div class="history-name">${record.hari}, ${record.tanggal}</div>
+            <div class="history-id">Operator: ${record.operator || '-'}</div>
           </div>
         `;
       });
