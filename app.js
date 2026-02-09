@@ -226,37 +226,46 @@ function collectFormData() {
 }
 
 function fillFormWithData(data) {
-  if(data.hari) document.getElementById('hari').value = data.hari;
-  if(data.tanggal) document.getElementById('tanggal').value = data.tanggal;
-  if(data.operator) document.getElementById('operator').value = data.operator;
-  if(data.shift) document.getElementById('shift').value = data.shift;
-  if(data.catatan) document.getElementById('catatan').value = data.catatan;
+  if(!data) return;
   
+  document.getElementById('hari').value = data.hari || '';
+  document.getElementById('tanggal').value = data.tanggal || '';
+  document.getElementById('operator').value = data.operator || '';
+  document.getElementById('shift').value = data.shift || '';
+  document.getElementById('catatan').value = data.catatan || '';
+  
+  // Restore selected times
   if(data.selectedTimes) {
     selectedTimes = data.selectedTimes;
-    updateTimeCheckboxes();
-    generateAllTables();
+    
+    // Update checkboxes
+    document.querySelectorAll('.time-check').forEach(checkbox => {
+      checkbox.checked = selectedTimes.includes(checkbox.value);
+    });
+    
+    // Rebuild tables
+    initializeTables();
   }
   
+  // Fill all parameter data
   Object.keys(dataStructure).forEach(paramName => {
     if(data[paramName]) {
-      fillTableData(paramName, data[paramName], dataStructure[paramName]);
+      fillTableData(paramName, dataStructure[paramName], data[paramName]);
     }
   });
 }
 
-function fillTableData(paramName, data, items) {
-  const tableId = paramName + 'Table';
+function fillTableData(paramName, items, data) {
+  if(!data) return;
   
   items.forEach((item, index) => {
     if(data[item.name]) {
       selectedTimes.forEach(time => {
-        if(data[item.name][time]) {
-          const inputId = `${tableId}_${index}_${time.replace(':', '')}`;
-          const input = document.getElementById(inputId);
-          if(input) {
-            input.value = data[item.name][time];
-          }
+        const tableId = paramName + 'Table';
+        const inputId = `${tableId}_${index}_${time.replace(':', '')}`;
+        const input = document.getElementById(inputId);
+        if(input && data[item.name][time]) {
+          input.value = data[item.name][time];
         }
       });
     }
@@ -264,72 +273,123 @@ function fillTableData(paramName, data, items) {
 }
 
 // ==========================================
-// TIME SELECTION
+// DATE CHANGE HANDLER
 // ==========================================
-function updateSelectedTimes() {
-  selectedTimes = [];
-  const checkboxes = document.querySelectorAll('.time-checkbox:checked');
-  checkboxes.forEach(checkbox => {
-    selectedTimes.push(checkbox.value);
-  });
+function onDateChange() {
+  const oldDate = localStorage.getItem('lastDraftDate_kualitas');
+  if(oldDate) {
+    saveDraft(true);
+  }
   
-  selectedTimes.sort((a, b) => {
-    const [aH] = a.split(':').map(Number);
-    const [bH] = b.split(':').map(Number);
-    
-    const aAdj = aH < 7 ? aH + 24 : aH;
-    const bAdj = bH < 7 ? bH + 24 : bH;
-    
-    return aAdj - bAdj;
-  });
+  const tanggalInput = document.getElementById('tanggal');
+  const date = new Date(tanggalInput.value + 'T00:00:00');
+  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  document.getElementById('hari').value = days[date.getDay()];
   
-  updateTimeDisplay();
-  generateAllTables();
-  saveDraft(true);
+  loadDraft();
 }
 
-function updateTimeCheckboxes() {
-  document.querySelectorAll('.time-checkbox').forEach(checkbox => {
-    checkbox.checked = selectedTimes.includes(checkbox.value);
-  });
-  updateTimeDisplay();
-}
+// ==========================================
+// PWA INSTALL
+// ==========================================
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installBtn = document.getElementById('installBtn');
+  if(installBtn) installBtn.style.display = 'block';
+});
 
-function updateTimeDisplay() {
-  const display = document.getElementById('selectedTimesDisplay');
-  if(selectedTimes.length === 0) {
-    display.textContent = 'Belum ada waktu dipilih';
-    display.style.color = '#999';
-  } else {
-    display.textContent = selectedTimes.join(', ');
-    display.style.color = '#333';
+function installPWA() {
+  if(deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        showNotification('Aplikasi berhasil diinstall!', 'success');
+      }
+      deferredPrompt = null;
+      const installBtn = document.getElementById('installBtn');
+      if(installBtn) installBtn.style.display = 'none';
+    });
   }
 }
 
-function selectAllTimes() {
-  document.querySelectorAll('.time-checkbox').forEach(checkbox => {
-    checkbox.checked = true;
-  });
-  updateSelectedTimes();
+// ==========================================
+// AUTHENTICATION
+// ==========================================
+async function login() {
+  const username = document.getElementById('loginUsername').value;
+  const password = document.getElementById('loginPassword').value;
+
+  if(!username || !password) {
+    showNotification('Username dan password harus diisi!', 'error');
+    return;
+  }
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'login',
+        username: username,
+        password: password
+      })
+    });
+
+    const result = await response.json();
+
+    if(result.success) {
+      currentUser = result.data;
+      localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
+      showNotification('Login berhasil!', 'success');
+      showMainApp();
+    } else {
+      showNotification(result.message, 'error');
+    }
+  } catch(error) {
+    showNotification('Gagal connect ke server: ' + error.message, 'error');
+  }
 }
 
-function deselectAllTimes() {
-  document.querySelectorAll('.time-checkbox').forEach(checkbox => {
-    checkbox.checked = false;
-  });
-  updateSelectedTimes();
+function logout() {
+  if(confirm('Yakin ingin logout?')) {
+    localStorage.removeItem('currentUser_kualitas');
+    currentUser = null;
+    document.getElementById('mainApp').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    showNotification('Logout berhasil!', 'success');
+  }
+}
+
+function showMainApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('mainApp').classList.remove('hidden');
+  document.getElementById('userDisplay').textContent = `👤 ${currentUser.nama}`;
+  
+  initializeTables();
+  loadHistory();
 }
 
 // ==========================================
-// GENERATE TABLES
+// TABLE INITIALIZATION
 // ==========================================
-function generateAllTables() {
+function updateSelectedTimes() {
+  const checkboxes = document.querySelectorAll('.time-check:checked');
+  selectedTimes = Array.from(checkboxes).map(cb => cb.value);
+  initializeTables();
+}
+
+function initializeTables() {
+  document.querySelectorAll('.time-check').forEach(checkbox => {
+    checkbox.addEventListener('change', updateSelectedTimes);
+  });
+  
+  // Create table for each parameter
   Object.keys(dataStructure).forEach(paramName => {
-    generateTable(paramName + 'Table', dataStructure[paramName]);
+    createDataTable(paramName + 'Table', paramName, dataStructure[paramName]);
   });
 }
 
-function generateTable(tableId, items) {
+function createDataTable(tableId, paramName, items) {
   const container = document.getElementById(tableId);
   if (!container) {
     console.warn(`Container ${tableId} not found`);
@@ -390,7 +450,7 @@ function collectTableData(paramName, items) {
 }
 
 // ==========================================
-// SAVE DATA - FINAL SUBMIT (FIXED VERSION)
+// SAVE DATA - FINAL SUBMIT
 // ==========================================
 async function saveDataFinal() {
   const hari = document.getElementById('hari').value;
@@ -413,83 +473,21 @@ async function saveDataFinal() {
 
   try {
     const reportData = collectFormData();
-    
-    // Prepare individual records to send
-    const records = [];
-    
-    // Loop through all parameters
-    Object.keys(dataStructure).forEach(paramName => {
-      const paramData = reportData[paramName];
-      
-      // Loop through each sample type
-      Object.keys(paramData).forEach(jenisSampel => {
-        const timeData = paramData[jenisSampel];
-        
-        // Loop through each time
-        Object.keys(timeData).forEach(waktu => {
-          const nilai = timeData[waktu];
-          
-          if(nilai !== null && nilai !== undefined && nilai !== '') {
-            records.push({
-              tanggal: tanggal,
-              waktu: waktu,
-              parameter: paramName,
-              jenisSampel: jenisSampel,
-              nilai: nilai,
-              catatan: `${hari} | Shift: ${shift} | Operator: ${operator}`
-            });
-          }
-        });
-      });
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'saveQualityReport',
+        userId: currentUser.userId,
+        reportData: reportData
+      })
     });
 
-    if(records.length === 0) {
-      showNotification('Tidak ada data yang diinput!', 'error');
-      saveBtn.disabled = false;
-      saveBtn.textContent = '📤 Kirim ke Google Drive';
-      return;
-    }
+    const result = await response.json();
 
-    // Send all records to backend
-    let successCount = 0;
-    let failCount = 0;
-    
-    showNotification(`Mengirim ${records.length} data ke server...`, 'info');
-
-    for(let i = 0; i < records.length; i++) {
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify({
-            action: 'saveQualityData',
-            userId: currentUser.userId,
-            ...records[i]
-          })
-        });
-
-        const result = await response.json();
-
-        if(result.success) {
-          successCount++;
-        } else {
-          failCount++;
-          console.error('Failed record:', records[i], result.message);
-        }
-        
-        // Update progress
-        saveBtn.textContent = `⏳ ${successCount + failCount}/${records.length} data...`;
-        
-      } catch(error) {
-        failCount++;
-        console.error('Error sending record:', records[i], error);
-      }
-    }
-
-    // Show final result
-    if(successCount > 0) {
-      showNotification(`✓ ${successCount} data berhasil dikirim!${failCount > 0 ? ` (${failCount} gagal)` : ''}`, 'success');
+    if(result.success) {
+      showNotification('✓ Laporan berhasil dikirim ke Google Drive!', 'success');
       
-      // Delete draft
       const draftKey = `draft_kualitas_${tanggal}`;
       localStorage.removeItem(draftKey);
       updateDraftIndicator(false);
@@ -497,12 +495,10 @@ async function saveDataFinal() {
       clearForm();
       loadHistory();
     } else {
-      showNotification('Gagal mengirim data! Cek koneksi internet.', 'error');
+      showNotification('Gagal kirim: ' + result.message, 'error');
     }
-    
   } catch(error) {
     showNotification('Error: ' + error.message, 'error');
-    console.error('Save error:', error);
   } finally {
     saveBtn.disabled = false;
     saveBtn.textContent = '📤 Kirim ke Google Drive';
@@ -562,11 +558,10 @@ async function loadHistory() {
           <div class="history-item" onclick="viewDetail('${record.recordId}')">
             <div class="history-header">
               <span class="history-date">${date}</span>
-              <span class="status-badge status-aktif">📄 ${record.parameter}</span>
+              <span class="status-badge status-aktif">📄 Laporan</span>
             </div>
-            <div class="history-name">${record.jenisSampel}: ${record.nilai} ${record.unit}</div>
-            <div class="history-id">${record.tanggal} ${record.waktu} | ${record.createdBy}</div>
-            ${record.statusKualitas !== 'OK' ? '<div style="color:red; font-weight:bold;">⚠️ ' + record.statusKualitas + '</div>' : ''}
+            <div class="history-name">${record.hari}, ${record.tanggal}</div>
+            <div class="history-id">Operator: ${record.operator || '-'}</div>
           </div>
         `;
       });
@@ -619,3 +614,7 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
+
+
+
+
