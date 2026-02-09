@@ -3,10 +3,6 @@
 // ==========================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbwo6b5oYH5oqZ_pNOASLZeZH1Zb8Ax3k8YFxQvUrkLO7p2e2-hjadnEiQ9xAUVj_S2R3w/exec';
 
-// ==========================================
-// DATA STRUCTURE
-// ==========================================
-
 const dataStructure = {
   'Kekeruhan': [
     { name: 'Air Baku', satuan: 'NTU', std_min: 0, std_max: '' },
@@ -972,7 +968,170 @@ function switchScreen(screen) {
     loadHistory();
   }
 }
+// ==========================================
+// RENDER TABLE FUNCTIONS
+// ==========================================
+function renderKualitasAirTable() {
+  const container = document.getElementById('kualitasAirTable');
+  
+  if(!container) {
+    console.error('Container kualitasAirTable tidak ditemukan!');
+    return;
+  }
+  
+  if(selectedTimes.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#999; padding:40px;">Pilih minimal 1 waktu pemeriksaan</p>';
+    return;
+  }
+  
+  let html = '<div class="input-table">';
+  
+  // Header
+  html += '<div class="table-header">';
+  html += '<div class="param-cell"><strong>Parameter</strong></div>';
+  html += '<div class="sample-cell"><strong>Sampel</strong></div>';
+  html += '<div class="satuan-cell"><strong>Satuan</strong></div>';
+  html += '<div class="std-cell"><strong>Standar</strong></div>';
+  
+  selectedTimes.forEach(time => {
+    html += `<div class="time-cell"><strong>${time}</strong></div>`;
+  });
+  
+  html += '</div>';
+  
+  // Rows
+  Object.keys(dataStructure).forEach(param => {
+    dataStructure[param].forEach((sample, idx) => {
+      html += '<div class="table-row">';
+      
+      if(idx === 0) {
+        html += `<div class="param-cell" style="grid-row: span ${dataStructure[param].length};">${param}</div>`;
+      }
+      
+      html += `<div class="sample-cell">${sample.name}</div>`;
+      html += `<div class="satuan-cell">${sample.satuan}</div>`;
+      
+      const std = sample.std_min !== '' || sample.std_max !== '' 
+        ? `${sample.std_min}${sample.std_max !== '' ? ' - ' + sample.std_max : ''}` 
+        : '-';
+      html += `<div class="std-cell">${std}</div>`;
+      
+      selectedTimes.forEach(time => {
+        const key = `${param}_${sample.name}`;
+        const inputId = `input_${key}_${time}`;
+        
+        html += `<div class="input-cell">
+          <input type="number" 
+                 step="0.01" 
+                 id="${inputId}" 
+                 class="data-input" 
+                 placeholder="0.00"
+                 onchange="saveDraft(true); updateValidationStatus();"
+                 onblur="updateValidationStatus();">
+        </div>`;
+      });
+      
+      html += '</div>';
+    });
+  });
+  
+  html += '</div>';
+  
+  container.innerHTML = html;
+  updateValidationStatus();
+}
 
+function updateSelectedTimes() {
+  selectedTimes = [];
+  
+  document.querySelectorAll('.time-check:checked').forEach(checkbox => {
+    selectedTimes.push(checkbox.value);
+  });
+  
+  selectedTimes.sort();
+  
+  console.log('Selected times:', selectedTimes);
+  
+  renderKualitasAirTable();
+}
+
+function onDateChange() {
+  const tanggal = document.getElementById('tanggal').value;
+  if(tanggal) {
+    const date = new Date(tanggal);
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    document.getElementById('hari').value = days[date.getDay()];
+    
+    setTimeout(() => {
+      loadDraft();
+    }, 100);
+  }
+}
+
+// ==========================================
+// VALIDATION STATUS
+// ==========================================
+function updateValidationStatus() {
+  const statusDiv = document.getElementById('validationStatus');
+  if(!statusDiv) return;
+  
+  const requiredFields = [
+    'hari',
+    'tanggal', 
+    'operator',
+    'shift'
+  ];
+  
+  let missingFields = [];
+  let emptyDataInputs = 0;
+  let totalDataInputs = 0;
+  
+  requiredFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if(field && !field.value) {
+      missingFields.push(fieldId);
+      field.classList.add('input-error');
+    } else if(field) {
+      field.classList.remove('input-error');
+    }
+  });
+  
+  document.querySelectorAll('.data-input').forEach(input => {
+    totalDataInputs++;
+    if(!input.value || input.value.trim() === '') {
+      emptyDataInputs++;
+      input.classList.add('input-error');
+    } else {
+      input.classList.remove('input-error');
+    }
+  });
+  
+  const allValid = missingFields.length === 0 && emptyDataInputs === 0;
+  
+  let html = '<div style="display: flex; align-items: center; gap: 10px;">';
+  
+  if(allValid) {
+    html += '<span style="color: #4caf50; font-weight: bold;">✅ Semua field terisi lengkap!</span>';
+  } else {
+    html += '<span style="color: #f44336; font-weight: bold;">⚠️ ';
+    if(missingFields.length > 0) {
+      html += `${missingFields.length} field header kosong. `;
+    }
+    if(emptyDataInputs > 0) {
+      html += `${emptyDataInputs} dari ${totalDataInputs} data pemeriksaan kosong.`;
+    }
+    html += '</span>';
+  }
+  
+  html += '</div>';
+  
+  statusDiv.innerHTML = html;
+  
+  const saveFinalBtn = document.getElementById('saveFinalBtn');
+  if(saveFinalBtn) {
+    saveFinalBtn.disabled = !allValid;
+  }
+}
 // ==========================================
 // AUTHENTICATION FUNCTIONS
 // ==========================================
@@ -1090,6 +1249,7 @@ function installPWA() {
       document.getElementById('installBtn').style.display = 'none';
     });
   }
+}
 }
 
 // ==========================================
