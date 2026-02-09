@@ -7,35 +7,35 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzKRvkf4OKGcb7kCx_1TLgH
 // ==========================================
 const dataStructure = {
   Kekeruhan: [
-    { name: 'Air Baku', satuan: 'NTU', min: 0, max: '-' },
-    { name: 'Air Aerasi', satuan: 'NTU', min: 0, max: '-' },
-    { name: 'SCADA Air Baku', satuan: 'NTU', min: 0, max: '-' },
-    { name: 'Sedimentasi Plant 1', satuan: 'NTU', min: 0, max: 2 },
-    { name: 'Sedimentasi Plant 2', satuan: 'NTU', min: 0, max: 2 },
-    { name: 'Sedimentasi Plant 3', satuan: 'NTU', min: 0, max: 4 },
-    { name: 'Sedimentasi Plant 4', satuan: 'NTU', min: 0, max: 1.5 },
-    { name: 'Outlet Filter Plant 1', satuan: 'NTU', min: 0, max: 1.5 },
-    { name: 'Outlet Filter Plant 2', satuan: 'NTU', min: 0, max: 1.5 },
-    { name: 'Outlet Filter Plant 3', satuan: 'NTU', min: 0, max: 1.5 },
-    { name: 'Outlet Filter Plant 4', satuan: 'NTU', min: 0, max: 1.5 },
-    { name: 'Reservoir', satuan: 'NTU', min: 0, max: 1.5 },
-    { name: 'Distribusi Campuran', satuan: 'NTU', min: 0, max: '-' },
-    { name: 'SCADA Distribusi', satuan: 'NTU', min: 0, max: 1.5 }
+    { name: 'Air Baku', satuan: 'NTU', min: 0.00 max: '-' },
+    { name: 'Air Aerasi', satuan: 'NTU', min: 0.00, max: '-' },
+    { name: 'SCADA Air Baku', satuan: 'NTU', min: 0.00, max: '-' },
+    { name: 'Sedimentasi Plant 1', satuan: 'NTU', min: 0.00, max: 2 },
+    { name: 'Sedimentasi Plant 2', satuan: 'NTU', min: 0.00, max: 2 },
+    { name: 'Sedimentasi Plant 3', satuan: 'NTU', min: 0.00, max: 4 },
+    { name: 'Sedimentasi Plant 4', satuan: 'NTU', min: 0.00, max: 1.50 },
+    { name: 'Outlet Filter Plant 1', satuan: 'NTU', min: 0.00, max: 1.50 },
+    { name: 'Outlet Filter Plant 2', satuan: 'NTU', min: 0.00, max: 1.50 },
+    { name: 'Outlet Filter Plant 3', satuan: 'NTU', min: 0.00, max: 1.50 },
+    { name: 'Outlet Filter Plant 4', satuan: 'NTU', min: 0.00, max: 1.50 },
+    { name: 'Reservoir', satuan: 'NTU', min: 0.00, max: 1.50 },
+    { name: 'Distribusi Campuran', satuan: 'NTU', min: 0.00, max: '-' },
+    { name: 'SCADA Distribusi', satuan: 'NTU', min: 0.00, max: 1.50 }
   ],
   pH: [
-    { name: 'Air Baku', satuan: 'pH', min: 6, max: 9 },
-    { name: 'SCADA Air Baku', satuan: 'pH', min: 6, max: 9 },
-    { name: 'Sedimentasi Plant 1', satuan: 'pH', min: 6.5, max: 8 },
-    { name: 'Sedimentasi Plant 2', satuan: 'pH', min: 6.5, max: 8 },
-    { name: 'Sedimentasi Plant 3', satuan: 'pH', min: 6.5, max: 8 },
-    { name: 'Sedimentasi Plant 4', satuan: 'pH', min: 6.5, max: 7.5 },
-    { name: 'Outlet Filter Plant 1', satuan: 'pH', min: 6.5, max: 7.5 },
-    { name: 'Outlet Filter Plant 2', satuan: 'pH', min: 6.5, max: 7.5 },
-    { name: 'Outlet Filter Plant 3', satuan: 'pH', min: 6.5, max: 8.5 },
-    { name: 'Outlet Filter Plant 4', satuan: 'pH', min: 6.5, max: 8.5 },
-    { name: 'Reservoir', satuan: 'pH', min: 6.5, max: 8.5 },
-    { name: 'Distribusi Campuran', satuan: 'pH', min: 6.5, max: 8.5 },
-    { name: 'SCADA Distribusi', satuan: 'pH', min: 6.5, max: 8.5 }
+    { name: 'Air Baku', satuan: 'pH', min: 6.00, max: 9.00 },
+    { name: 'SCADA Air Baku', satuan: 'pH', min: 6.00, max: 9.00 },
+    { name: 'Sedimentasi Plant 1', satuan: 'pH', min: 6.50, max: 8.00 },
+    { name: 'Sedimentasi Plant 2', satuan: 'pH', min: 6.50, max: 8.00 },
+    { name: 'Sedimentasi Plant 3', satuan: 'pH', min: 6.50, max: 8.00 },
+    { name: 'Sedimentasi Plant 4', satuan: 'pH', min: 6.50, max: 7.50 },
+    { name: 'Outlet Filter Plant 1', satuan: 'pH', min: 6.50, max: 7.50 },
+    { name: 'Outlet Filter Plant 2', satuan: 'pH', min: 6.50, max: 7.50 },
+    { name: 'Outlet Filter Plant 3', satuan: 'pH', min: 6.50, max: 8.50 },
+    { name: 'Outlet Filter Plant 4', satuan: 'pH', min: 6.50, max: 8.50 },
+    { name: 'Reservoir', satuan: 'pH', min: 6.50, max: 8.50 },
+    { name: 'Distribusi Campuran', satuan: 'pH', min: 6.50, max: 8.50 },
+    { name: 'SCADA Distribusi', satuan: 'pH', min: 6.50, max: 8.50 }
   ],
   Temperatur: [
     { name: 'Air Baku', satuan: '°C', min: '-', max: '-' },
@@ -44,52 +44,52 @@ const dataStructure = {
     { name: 'Udara', satuan: '°C', min: '-', max: '-' }
   ],
   Warna: [
-    { name: 'Air Baku', satuan: 'PtCo', min: 0, max: '-' },
-    { name: 'Distribusi Campuran', satuan: 'PtCo', min: 0, max: 10 }
+    { name: 'Air Baku', satuan: 'PtCo', min: 0.00, max: '-' },
+    { name: 'Distribusi Campuran', satuan: 'PtCo', min: 0.00, max: 10.00 }
   ],
   DHL: [
     { name: 'Air Baku', satuan: 'µS/cm', min: '-', max: '-' },
     { name: 'Distribusi Campuran', satuan: 'µS/cm', min: '-', max: '-' }
   ],
   Ammonium: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 1 },
-    { name: 'Outlet Aerasi', satuan: 'mg/L', min: 0, max: 1.5 },
-    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', min: 0, max: 1.5 },
-    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', min: 0, max: 1.5 },
-    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', min: 0, max: 1.5 },
-    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', min: 0, max: 1.5 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 1.5 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 1 },
+    { name: 'Outlet Aerasi', satuan: 'mg/L', min: 0.00, max: 1.50 },
+    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', min: 0.00, max: 1.50 },
+    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', min: 0.00, max: 1.50 },
+    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', min: 0.00, max: 1.50 },
+    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', min: 0.00, max: 1.50 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 1.50 }
   ],
   Mangan: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 0.5 },
-    { name: 'Outlet Aerasi', satuan: 'mg/L', min: 0, max: 0.5 },
-    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', min: 0, max: 0.4 },
-    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', min: 0, max: 0.4 },
-    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', min: 0, max: 0.4 },
-    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', min: 0, max: 0.4 },
-    { name: 'Reservoir', satuan: 'mg/L', min: 0, max: 0.1 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 0.1 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 0.50 },
+    { name: 'Outlet Aerasi', satuan: 'mg/L', min: 0.00, max: 0.50 },
+    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', min: 0.00, max: 0.40 },
+    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', min: 0.00, max: 0.40 },
+    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', min: 0.00, max: 0.40 },
+    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', min: 0.00, max: 0.40 },
+    { name: 'Reservoir', satuan: 'mg/L', min: 0.00, max: 0.10 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 0.10 }
   ],
   Detergen: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 0.1 },
-    { name: 'Air Aerasi', satuan: 'mg/L', min: 0, max: 0.1 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 0.05 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 0.10 },
+    { name: 'Air Aerasi', satuan: 'mg/L', min: 0.00, max: 0.10 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 0.05 }
   ],
   DO: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 5 },
-    { name: 'Air Aerasi', satuan: 'mg/L', min: 2, max: 7 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 5.00 },
+    { name: 'Air Aerasi', satuan: 'mg/L', min: 2.00, max: 7.00 }
   ],
   Besi: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 2 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 2 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 2.00 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 2.00 }
   ],
   Alumunium: [
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 0.2 }
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 0.20 }
   ],
   'Free Chlorine': [
-    { name: 'Reservoir', satuan: 'mg/L', min: 0.2, max: 0.5 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.2, max: 0.5 },
-    { name: 'SCADA Distribusi', satuan: 'mg/L', min: 0.2, max: 0.5 }
+    { name: 'Reservoir', satuan: 'mg/L', min: 0.20, max: 0.50 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.20, max: 0.50 },
+    { name: 'SCADA Distribusi', satuan: 'mg/L', min: 0.20, max: 0.50 }
   ],
   'Total Chlorine': [
     { name: 'Distribusi Campuran', satuan: 'mg/L', min: '-', max: '-' }
@@ -226,46 +226,37 @@ function collectFormData() {
 }
 
 function fillFormWithData(data) {
-  if(!data) return;
+  if(data.hari) document.getElementById('hari').value = data.hari;
+  if(data.tanggal) document.getElementById('tanggal').value = data.tanggal;
+  if(data.operator) document.getElementById('operator').value = data.operator;
+  if(data.shift) document.getElementById('shift').value = data.shift;
+  if(data.catatan) document.getElementById('catatan').value = data.catatan;
   
-  document.getElementById('hari').value = data.hari || '';
-  document.getElementById('tanggal').value = data.tanggal || '';
-  document.getElementById('operator').value = data.operator || '';
-  document.getElementById('shift').value = data.shift || '';
-  document.getElementById('catatan').value = data.catatan || '';
-  
-  // Restore selected times
   if(data.selectedTimes) {
     selectedTimes = data.selectedTimes;
-    
-    // Update checkboxes
-    document.querySelectorAll('.time-check').forEach(checkbox => {
-      checkbox.checked = selectedTimes.includes(checkbox.value);
-    });
-    
-    // Rebuild tables
-    initializeTables();
+    updateTimeCheckboxes();
+    generateAllTables();
   }
   
-  // Fill all parameter data
   Object.keys(dataStructure).forEach(paramName => {
     if(data[paramName]) {
-      fillTableData(paramName, dataStructure[paramName], data[paramName]);
+      fillTableData(paramName, data[paramName], dataStructure[paramName]);
     }
   });
 }
 
-function fillTableData(paramName, items, data) {
-  if(!data) return;
+function fillTableData(paramName, data, items) {
+  const tableId = paramName + 'Table';
   
   items.forEach((item, index) => {
     if(data[item.name]) {
       selectedTimes.forEach(time => {
-        const tableId = paramName + 'Table';
-        const inputId = `${tableId}_${index}_${time.replace(':', '')}`;
-        const input = document.getElementById(inputId);
-        if(input && data[item.name][time]) {
-          input.value = data[item.name][time];
+        if(data[item.name][time]) {
+          const inputId = `${tableId}_${index}_${time.replace(':', '')}`;
+          const input = document.getElementById(inputId);
+          if(input) {
+            input.value = data[item.name][time];
+          }
         }
       });
     }
@@ -273,123 +264,72 @@ function fillTableData(paramName, items, data) {
 }
 
 // ==========================================
-// DATE CHANGE HANDLER
-// ==========================================
-function onDateChange() {
-  const oldDate = localStorage.getItem('lastDraftDate_kualitas');
-  if(oldDate) {
-    saveDraft(true);
-  }
-  
-  const tanggalInput = document.getElementById('tanggal');
-  const date = new Date(tanggalInput.value + 'T00:00:00');
-  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-  document.getElementById('hari').value = days[date.getDay()];
-  
-  loadDraft();
-}
-
-// ==========================================
-// PWA INSTALL
-// ==========================================
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const installBtn = document.getElementById('installBtn');
-  if(installBtn) installBtn.style.display = 'block';
-});
-
-function installPWA() {
-  if(deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        showNotification('Aplikasi berhasil diinstall!', 'success');
-      }
-      deferredPrompt = null;
-      const installBtn = document.getElementById('installBtn');
-      if(installBtn) installBtn.style.display = 'none';
-    });
-  }
-}
-
-// ==========================================
-// AUTHENTICATION
-// ==========================================
-async function login() {
-  const username = document.getElementById('loginUsername').value;
-  const password = document.getElementById('loginPassword').value;
-
-  if(!username || !password) {
-    showNotification('Username dan password harus diisi!', 'error');
-    return;
-  }
-
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify({
-        action: 'login',
-        username: username,
-        password: password
-      })
-    });
-
-    const result = await response.json();
-
-    if(result.success) {
-      currentUser = result.data;
-      localStorage.setItem('currentUser_kualitas', JSON.stringify(currentUser));
-      showNotification('Login berhasil!', 'success');
-      showMainApp();
-    } else {
-      showNotification(result.message, 'error');
-    }
-  } catch(error) {
-    showNotification('Gagal connect ke server: ' + error.message, 'error');
-  }
-}
-
-function logout() {
-  if(confirm('Yakin ingin logout?')) {
-    localStorage.removeItem('currentUser_kualitas');
-    currentUser = null;
-    document.getElementById('mainApp').classList.add('hidden');
-    document.getElementById('loginScreen').classList.remove('hidden');
-    showNotification('Logout berhasil!', 'success');
-  }
-}
-
-function showMainApp() {
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('mainApp').classList.remove('hidden');
-  document.getElementById('userDisplay').textContent = `👤 ${currentUser.nama}`;
-  
-  initializeTables();
-  loadHistory();
-}
-
-// ==========================================
-// TABLE INITIALIZATION
+// TIME SELECTION
 // ==========================================
 function updateSelectedTimes() {
-  const checkboxes = document.querySelectorAll('.time-check:checked');
-  selectedTimes = Array.from(checkboxes).map(cb => cb.value);
-  initializeTables();
-}
-
-function initializeTables() {
-  document.querySelectorAll('.time-check').forEach(checkbox => {
-    checkbox.addEventListener('change', updateSelectedTimes);
+  selectedTimes = [];
+  const checkboxes = document.querySelectorAll('.time-checkbox:checked');
+  checkboxes.forEach(checkbox => {
+    selectedTimes.push(checkbox.value);
   });
   
-  // Create table for each parameter
+  selectedTimes.sort((a, b) => {
+    const [aH] = a.split(':').map(Number);
+    const [bH] = b.split(':').map(Number);
+    
+    const aAdj = aH < 7 ? aH + 24 : aH;
+    const bAdj = bH < 7 ? bH + 24 : bH;
+    
+    return aAdj - bAdj;
+  });
+  
+  updateTimeDisplay();
+  generateAllTables();
+  saveDraft(true);
+}
+
+function updateTimeCheckboxes() {
+  document.querySelectorAll('.time-checkbox').forEach(checkbox => {
+    checkbox.checked = selectedTimes.includes(checkbox.value);
+  });
+  updateTimeDisplay();
+}
+
+function updateTimeDisplay() {
+  const display = document.getElementById('selectedTimesDisplay');
+  if(selectedTimes.length === 0) {
+    display.textContent = 'Belum ada waktu dipilih';
+    display.style.color = '#999';
+  } else {
+    display.textContent = selectedTimes.join(', ');
+    display.style.color = '#333';
+  }
+}
+
+function selectAllTimes() {
+  document.querySelectorAll('.time-checkbox').forEach(checkbox => {
+    checkbox.checked = true;
+  });
+  updateSelectedTimes();
+}
+
+function deselectAllTimes() {
+  document.querySelectorAll('.time-checkbox').forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  updateSelectedTimes();
+}
+
+// ==========================================
+// GENERATE TABLES
+// ==========================================
+function generateAllTables() {
   Object.keys(dataStructure).forEach(paramName => {
-    createDataTable(paramName + 'Table', paramName, dataStructure[paramName]);
+    generateTable(paramName + 'Table', dataStructure[paramName]);
   });
 }
 
-function createDataTable(tableId, paramName, items) {
+function generateTable(tableId, items) {
   const container = document.getElementById(tableId);
   if (!container) {
     console.warn(`Container ${tableId} not found`);
@@ -450,7 +390,7 @@ function collectTableData(paramName, items) {
 }
 
 // ==========================================
-// SAVE DATA - FINAL SUBMIT
+// SAVE DATA - FINAL SUBMIT (FIXED VERSION)
 // ==========================================
 async function saveDataFinal() {
   const hari = document.getElementById('hari').value;
@@ -473,21 +413,83 @@ async function saveDataFinal() {
 
   try {
     const reportData = collectFormData();
-
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify({
-        action: 'saveQualityReport',
-        userId: currentUser.userId,
-        reportData: reportData
-      })
+    
+    // Prepare individual records to send
+    const records = [];
+    
+    // Loop through all parameters
+    Object.keys(dataStructure).forEach(paramName => {
+      const paramData = reportData[paramName];
+      
+      // Loop through each sample type
+      Object.keys(paramData).forEach(jenisSampel => {
+        const timeData = paramData[jenisSampel];
+        
+        // Loop through each time
+        Object.keys(timeData).forEach(waktu => {
+          const nilai = timeData[waktu];
+          
+          if(nilai !== null && nilai !== undefined && nilai !== '') {
+            records.push({
+              tanggal: tanggal,
+              waktu: waktu,
+              parameter: paramName,
+              jenisSampel: jenisSampel,
+              nilai: nilai,
+              catatan: `${hari} | Shift: ${shift} | Operator: ${operator}`
+            });
+          }
+        });
+      });
     });
 
-    const result = await response.json();
+    if(records.length === 0) {
+      showNotification('Tidak ada data yang diinput!', 'error');
+      saveBtn.disabled = false;
+      saveBtn.textContent = '📤 Kirim ke Google Drive';
+      return;
+    }
 
-    if(result.success) {
-      showNotification('✓ Laporan berhasil dikirim ke Google Drive!', 'success');
+    // Send all records to backend
+    let successCount = 0;
+    let failCount = 0;
+    
+    showNotification(`Mengirim ${records.length} data ke server...`, 'info');
+
+    for(let i = 0; i < records.length; i++) {
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'saveQualityData',
+            userId: currentUser.userId,
+            ...records[i]
+          })
+        });
+
+        const result = await response.json();
+
+        if(result.success) {
+          successCount++;
+        } else {
+          failCount++;
+          console.error('Failed record:', records[i], result.message);
+        }
+        
+        // Update progress
+        saveBtn.textContent = `⏳ ${successCount + failCount}/${records.length} data...`;
+        
+      } catch(error) {
+        failCount++;
+        console.error('Error sending record:', records[i], error);
+      }
+    }
+
+    // Show final result
+    if(successCount > 0) {
+      showNotification(`✓ ${successCount} data berhasil dikirim!${failCount > 0 ? ` (${failCount} gagal)` : ''}`, 'success');
       
+      // Delete draft
       const draftKey = `draft_kualitas_${tanggal}`;
       localStorage.removeItem(draftKey);
       updateDraftIndicator(false);
@@ -495,10 +497,12 @@ async function saveDataFinal() {
       clearForm();
       loadHistory();
     } else {
-      showNotification('Gagal kirim: ' + result.message, 'error');
+      showNotification('Gagal mengirim data! Cek koneksi internet.', 'error');
     }
+    
   } catch(error) {
     showNotification('Error: ' + error.message, 'error');
+    console.error('Save error:', error);
   } finally {
     saveBtn.disabled = false;
     saveBtn.textContent = '📤 Kirim ke Google Drive';
@@ -558,10 +562,11 @@ async function loadHistory() {
           <div class="history-item" onclick="viewDetail('${record.recordId}')">
             <div class="history-header">
               <span class="history-date">${date}</span>
-              <span class="status-badge status-aktif">📄 Laporan</span>
+              <span class="status-badge status-aktif">📄 ${record.parameter}</span>
             </div>
-            <div class="history-name">${record.hari}, ${record.tanggal}</div>
-            <div class="history-id">Operator: ${record.operator || '-'}</div>
+            <div class="history-name">${record.jenisSampel}: ${record.nilai} ${record.unit}</div>
+            <div class="history-id">${record.tanggal} ${record.waktu} | ${record.createdBy}</div>
+            ${record.statusKualitas !== 'OK' ? '<div style="color:red; font-weight:bold;">⚠️ ' + record.statusKualitas + '</div>' : ''}
           </div>
         `;
       });
@@ -614,5 +619,3 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
-
-
