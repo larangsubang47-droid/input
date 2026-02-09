@@ -7,35 +7,35 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzKRvkf4OKGcb7kCx_1TLgH
 // ==========================================
 const dataStructure = {
   Kekeruhan: [
-    { name: 'Air Baku', satuan: 'NTU', min: 0.00 max: '-' },
-    { name: 'Air Aerasi', satuan: 'NTU', min: 0.00, max: '-' },
-    { name: 'SCADA Air Baku', satuan: 'NTU', min: 0.00, max: '-' },
-    { name: 'Sedimentasi Plant 1', satuan: 'NTU', min: 0.00, max: 2 },
-    { name: 'Sedimentasi Plant 2', satuan: 'NTU', min: 0.00, max: 2 },
-    { name: 'Sedimentasi Plant 3', satuan: 'NTU', min: 0.00, max: 4 },
-    { name: 'Sedimentasi Plant 4', satuan: 'NTU', min: 0.00, max: 1.50 },
-    { name: 'Outlet Filter Plant 1', satuan: 'NTU', min: 0.00, max: 1.50 },
-    { name: 'Outlet Filter Plant 2', satuan: 'NTU', min: 0.00, max: 1.50 },
-    { name: 'Outlet Filter Plant 3', satuan: 'NTU', min: 0.00, max: 1.50 },
-    { name: 'Outlet Filter Plant 4', satuan: 'NTU', min: 0.00, max: 1.50 },
-    { name: 'Reservoir', satuan: 'NTU', min: 0.00, max: 1.50 },
-    { name: 'Distribusi Campuran', satuan: 'NTU', min: 0.00, max: '-' },
-    { name: 'SCADA Distribusi', satuan: 'NTU', min: 0.00, max: 1.50 }
+    { name: 'Air Baku', satuan: 'NTU', min: 0, max: '-' },
+    { name: 'Air Aerasi', satuan: 'NTU', min: 0, max: '-' },
+    { name: 'SCADA Air Baku', satuan: 'NTU', min: 0, max: '-' },
+    { name: 'Sedimentasi Plant 1', satuan: 'NTU', min: 0, max: 2 },
+    { name: 'Sedimentasi Plant 2', satuan: 'NTU', min: 0, max: 2 },
+    { name: 'Sedimentasi Plant 3', satuan: 'NTU', min: 0, max: 4 },
+    { name: 'Sedimentasi Plant 4', satuan: 'NTU', min: 0, max: 1.5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'NTU', min: 0, max: 1.5 },
+    { name: 'Outlet Filter Plant 2', satuan: 'NTU', min: 0, max: 1.5 },
+    { name: 'Outlet Filter Plant 3', satuan: 'NTU', min: 0, max: 1.5 },
+    { name: 'Outlet Filter Plant 4', satuan: 'NTU', min: 0, max: 1.5 },
+    { name: 'Reservoir', satuan: 'NTU', min: 0, max: 1.5 },
+    { name: 'Distribusi Campuran', satuan: 'NTU', min: 0, max: '-' },
+    { name: 'SCADA Distribusi', satuan: 'NTU', min: 0, max: 1.5 }
   ],
   pH: [
-    { name: 'Air Baku', satuan: 'pH', min: 6.00, max: 9.00 },
-    { name: 'SCADA Air Baku', satuan: 'pH', min: 6.00, max: 9.00 },
-    { name: 'Sedimentasi Plant 1', satuan: 'pH', min: 6.50, max: 8.00 },
-    { name: 'Sedimentasi Plant 2', satuan: 'pH', min: 6.50, max: 8.00 },
-    { name: 'Sedimentasi Plant 3', satuan: 'pH', min: 6.50, max: 8.00 },
-    { name: 'Sedimentasi Plant 4', satuan: 'pH', min: 6.50, max: 7.50 },
-    { name: 'Outlet Filter Plant 1', satuan: 'pH', min: 6.50, max: 7.50 },
-    { name: 'Outlet Filter Plant 2', satuan: 'pH', min: 6.50, max: 7.50 },
-    { name: 'Outlet Filter Plant 3', satuan: 'pH', min: 6.50, max: 8.50 },
-    { name: 'Outlet Filter Plant 4', satuan: 'pH', min: 6.50, max: 8.50 },
-    { name: 'Reservoir', satuan: 'pH', min: 6.50, max: 8.50 },
-    { name: 'Distribusi Campuran', satuan: 'pH', min: 6.50, max: 8.50 },
-    { name: 'SCADA Distribusi', satuan: 'pH', min: 6.50, max: 8.50 }
+    { name: 'Air Baku', satuan: 'pH', min: 6, max: 9 },
+    { name: 'SCADA Air Baku', satuan: 'pH', min: 6, max: 9 },
+    { name: 'Sedimentasi Plant 1', satuan: 'pH', min: 6.5, max: 8 },
+    { name: 'Sedimentasi Plant 2', satuan: 'pH', min: 6.5, max: 8 },
+    { name: 'Sedimentasi Plant 3', satuan: 'pH', min: 6.5, max: 8 },
+    { name: 'Sedimentasi Plant 4', satuan: 'pH', min: 6.5, max: 7.5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'pH', min: 6.5, max: 7.5 },
+    { name: 'Outlet Filter Plant 2', satuan: 'pH', min: 6.5, max: 7.5 },
+    { name: 'Outlet Filter Plant 3', satuan: 'pH', min: 6.5, max: 8.5 },
+    { name: 'Outlet Filter Plant 4', satuan: 'pH', min: 6.5, max: 8.5 },
+    { name: 'Reservoir', satuan: 'pH', min: 6.5, max: 8.5 },
+    { name: 'Distribusi Campuran', satuan: 'pH', min: 6.5, max: 8.5 },
+    { name: 'SCADA Distribusi', satuan: 'pH', min: 6.5, max: 8.5 }
   ],
   Temperatur: [
     { name: 'Air Baku', satuan: '°C', min: '-', max: '-' },
@@ -44,52 +44,52 @@ const dataStructure = {
     { name: 'Udara', satuan: '°C', min: '-', max: '-' }
   ],
   Warna: [
-    { name: 'Air Baku', satuan: 'PtCo', min: 0.00, max: '-' },
-    { name: 'Distribusi Campuran', satuan: 'PtCo', min: 0.00, max: 10.00 }
+    { name: 'Air Baku', satuan: 'PtCo', min: 0, max: '-' },
+    { name: 'Distribusi Campuran', satuan: 'PtCo', min: 0, max: 10 }
   ],
   DHL: [
     { name: 'Air Baku', satuan: 'µS/cm', min: '-', max: '-' },
     { name: 'Distribusi Campuran', satuan: 'µS/cm', min: '-', max: '-' }
   ],
   Ammonium: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 1 },
-    { name: 'Outlet Aerasi', satuan: 'mg/L', min: 0.00, max: 1.50 },
-    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', min: 0.00, max: 1.50 },
-    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', min: 0.00, max: 1.50 },
-    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', min: 0.00, max: 1.50 },
-    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', min: 0.00, max: 1.50 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 1.50 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 1 },
+    { name: 'Outlet Aerasi', satuan: 'mg/L', min: 0, max: 1.5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', min: 0, max: 1.5 },
+    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', min: 0, max: 1.5 },
+    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', min: 0, max: 1.5 },
+    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', min: 0, max: 1.5 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 1.5 }
   ],
   Mangan: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 0.50 },
-    { name: 'Outlet Aerasi', satuan: 'mg/L', min: 0.00, max: 0.50 },
-    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', min: 0.00, max: 0.40 },
-    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', min: 0.00, max: 0.40 },
-    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', min: 0.00, max: 0.40 },
-    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', min: 0.00, max: 0.40 },
-    { name: 'Reservoir', satuan: 'mg/L', min: 0.00, max: 0.10 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 0.10 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 0.5 },
+    { name: 'Outlet Aerasi', satuan: 'mg/L', min: 0, max: 0.5 },
+    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', min: 0, max: 0.4 },
+    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', min: 0, max: 0.4 },
+    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', min: 0, max: 0.4 },
+    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', min: 0, max: 0.4 },
+    { name: 'Reservoir', satuan: 'mg/L', min: 0, max: 0.1 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 0.1 }
   ],
   Detergen: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 0.10 },
-    { name: 'Air Aerasi', satuan: 'mg/L', min: 0.00, max: 0.10 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 0.05 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 0.1 },
+    { name: 'Air Aerasi', satuan: 'mg/L', min: 0, max: 0.1 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 0.05 }
   ],
   DO: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 5.00 },
-    { name: 'Air Aerasi', satuan: 'mg/L', min: 2.00, max: 7.00 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 5 },
+    { name: 'Air Aerasi', satuan: 'mg/L', min: 2, max: 7 }
   ],
   Besi: [
-    { name: 'Air Baku', satuan: 'mg/L', min: 0.00, max: 2.00 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 2.00 }
+    { name: 'Air Baku', satuan: 'mg/L', min: 0, max: 2 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 2 }
   ],
   Alumunium: [
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.00, max: 0.20 }
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0, max: 0.2 }
   ],
   'Free Chlorine': [
-    { name: 'Reservoir', satuan: 'mg/L', min: 0.20, max: 0.50 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.20, max: 0.50 },
-    { name: 'SCADA Distribusi', satuan: 'mg/L', min: 0.20, max: 0.50 }
+    { name: 'Reservoir', satuan: 'mg/L', min: 0.2, max: 0.5 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', min: 0.2, max: 0.5 },
+    { name: 'SCADA Distribusi', satuan: 'mg/L', min: 0.2, max: 0.5 }
   ],
   'Total Chlorine': [
     { name: 'Distribusi Campuran', satuan: 'mg/L', min: '-', max: '-' }
@@ -614,7 +614,5 @@ function showNotification(message, type = 'success') {
 if ('Notification' in window && Notification.permission === 'default') {
   Notification.requestPermission();
 }
-
-
 
 
