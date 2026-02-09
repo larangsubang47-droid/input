@@ -39,7 +39,7 @@ const dataStructure = {
     { name: 'Air Baku', satuan: '°C', std_min: '', std_max: '' },
     { name: 'Udara', satuan: '°C', std_min: '', std_max: '' },
     { name: 'Distribusi Campuran', satuan: '°C', std_min: '', std_max: '' },
-    { name: 'Udara (Distribusi)', satuan: '°C', std_min: '', std_max: '' }
+    { name: 'Udara', satuan: '°C', std_min: '', std_max: '' }
   ],
   'Warna': [
     { name: 'Air Baku', satuan: 'PtCo', std_min: 0, std_max: '' },
@@ -68,23 +68,29 @@ const dataStructure = {
     { name: 'Reservoir', satuan: 'mg/L', std_min: 0, std_max: 0.1 },
     { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0, std_max: 0.1 }
   ],
-  'Besi': [
-    { name: 'Air Baku', satuan: 'mg/L', std_min: 0, std_max: 5 },
-    { name: 'Outlet Aerasi', satuan: 'mg/L', std_min: 0, std_max: 5 },
-    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', std_min: 0, std_max: 1 },
-    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', std_min: 0, std_max: 1 },
-    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', std_min: 0, std_max: 1 },
-    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', std_min: 0, std_max: 1 },
-    { name: 'Reservoir', satuan: 'mg/L', std_min: 0, std_max: 1 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0, std_max: 1 }
+  'Detergen': [
+    { name: 'Air Baku', satuan: 'mg/L', std_min: 0, std_max: 0.1 },
+    { name: 'Air Aerasi', satuan: 'mg/L', std_min: 0, std_max: 0.1 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0, std_max: 0.05 }
   ],
-  'Sisa Chlor': [
-    { name: 'Outlet Filter Plant 1', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
-    { name: 'Outlet Filter Plant 2', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
-    { name: 'Outlet Filter Plant 3', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
-    { name: 'Outlet Filter Plant 4', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
+  'DO': [
+    { name: 'Air Baku', satuan: 'mg/L', std_min: 0, std_max: 5 },
+    { name: 'Air Aerasi', satuan: 'mg/L', std_min: 2, std_max: 7 }
+  ],
+  'Besi': [
+    { name: 'Air Baku', satuan: 'mg/L', std_min: 0, std_max: 2 },
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0, std_max: 2 }
+  ],
+  'Alumunium': [
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0, std_max: 0.2 }
+  ],
+  'Free Chlorine': [
     { name: 'Reservoir', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
-    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 }
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 },
+    { name: 'SCADA Distribusi', satuan: 'mg/L', std_min: 0.2, std_max: 0.5 }
+  ],
+  'Total Chlorine': [
+    { name: 'Distribusi Campuran', satuan: 'mg/L', std_min: '', std_max: '' }
   ]
 };
 
